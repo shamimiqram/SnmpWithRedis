@@ -5,7 +5,7 @@ LDFLAGS=-lhiredis -lnetsnmp
 
 all: myprogram
 
-myprogram: main.o redis_task.o snmp_task.o helper.o global.o
+myprogram: src/main.o src/redis_task.o src/snmp_task.o src/helper.o src/global.o
 	$(CC) -o myprogram main.o redis_task.o snmp_task.o helper.o global.o $(LDFLAGS)
 
 src/main.o: src/main.c

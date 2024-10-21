@@ -25,8 +25,6 @@ int main() {
     const char *snmp_value = "MyHostName";
 
     // Set the SNMP value
-    set_snmp_value(oid, snmp_value);
-
     // Clean up Redis connection
     free_redis();
     return 0;

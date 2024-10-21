@@ -5,56 +5,66 @@
 #include "snmp_task.h"
 #include "global.h"
 
+#define PUSH_COMMAND "LPUSH"
+#define POP_COMMAND "LPOP"
+#define SET_COMMAND "SET"
+#define HSET_COMMAND "HSET"
+#define SNMP_VERSION SNMP_VERSION_2c
+#define COMMUNITY_STRING "audramonitor"
+#define HOST_IP "103.218.25.9"
 
-void init_snmp_task() {
-    // Initialize the SNMP library
+netsnmp_session session, *ss;
+netsnmp_pdu *pdu;
+netsnmp_variable_list *vars;
+netsnmp_pdu *response;
+
+void init_snmp_task()
+{
     init_snmp("snmpapp");
-}
+    active_snmp_req = 0;
 
-void set_snmp_value(const char *oid, const char *value) {
-    snmp_session session, *ss;
-    snmp_pdu *pdu;
-    snmp_pdu *response;
-    oid anOID[MAX_OID_LEN];
-    size_t anOID_len;
-
-    // Initialize session
+    // Set up the SNMP session
     snmp_sess_init(&session);
-    session.version = SNMP_VERSION_2c;
-    session.peername = "localhost"; // SNMP agent address
-    session.community = (u_char *)"public"; // SNMP community string
+    session.peername = strdup(HOST_IP);
+    session.version = SNMP_VERSION;
+    session.community = (u_char *)strdup(COMMUNITY_STRING);
     session.community_len = strlen((const char *)session.community);
-
-    // Open session
-    ss = snmp_open(&session);
-    if (!ss) {
-        snmp_perror("snmp_open");
-        exit(1);
-    }
-
-    // Convert OID from string to an OID object
-    anOID_len = MAX_OID_LEN;
-    if (!snmp_parse_oid(oid, anOID, &anOID_len)) {
-        snmp_perror(oid);
-        exit(1);
-    }
-
-    // Create PDU for SET request
-    pdu = snmp_pdu_create(SNMP_SET);
-    snmp_add_var(pdu, anOID, anOID_len, 's', value);
-
-    // Send the request
-    int status = snmp_send(ss, pdu);
-    if (status == 0) {
-        snmp_perror("snmp_send");
-    }
-
-    // Clean up
-    snmp_close(ss);
 }
 
-void async_callback(int operation, struct snmp_session *session, int reqid,
-                    netsnmp_pdu *response)
+void snmp_get_req(char str[], netsnmp_session session)
+{
+    netsnmp_session *ss;
+    netsnmp_pdu *pdu;
+
+    ss = snmp_open(&session);
+    pdu = snmp_pdu_create(SNMP_MSG_GET);
+    oid oid[MAX_OID_LEN];
+    size_t oid_len = MAX_OID_LEN;
+
+    if (!snmp_parse_oid(str, oid, &oid_len))
+    {
+        fprintf(stderr, "Failed to parse OID\n");
+        return 1;
+    }
+
+    session.callback = async_callback;
+    session.callback_magic = ss;
+    printf("\n\nSend GET request: ");
+    printCurrentTime();
+    snmp_add_null_var(pdu, oid, oid_len);
+
+    int status = snmp_async_send(ss, pdu, async_callback, NULL);
+    active_snmp_req++;
+    printf("Status : %d --- > ", status);
+    printCurrentTime();
+    if (status == 0)
+    {
+        snmp_perror("snmp_send");
+        exit(1);
+    }
+}
+
+void async_callback(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response)
 {
 
     if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
