@@ -1,9 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
-#include <net-snmp/library/snmp_client.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "snmp_task.h"
+#include "global.h"
+
 
 void init_snmp_task() {
     // Initialize the SNMP library
@@ -50,4 +51,28 @@ void set_snmp_value(const char *oid, const char *value) {
 
     // Clean up
     snmp_close(ss);
+}
+
+void async_callback(int operation, struct snmp_session *session, int reqid,
+                    netsnmp_pdu *response)
+{
+
+    if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
+    {
+
+        for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
+        {
+            print_variable(vars->name, vars->name_length, vars);
+
+            printf("GET Response : ");
+            printCurrentTime();
+        }
+    }
+
+    else
+    {
+        // Handle error
+        fprintf(stderr, "Error receiving SNMP response\n");
+    }
+    active_snmp_req--;
 }

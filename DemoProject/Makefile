@@ -5,8 +5,8 @@ LDFLAGS=-lhiredis -lnetsnmp
 
 all: myprogram
 
-myprogram: main.o redis_task.o snmp_task.o helper.o
-	$(CC) -o myprogram main.o redis_task.o snmp_task.o helper.o $(LDFLAGS)
+myprogram: main.o redis_task.o snmp_task.o helper.o global.o
+	$(CC) -o myprogram main.o redis_task.o snmp_task.o helper.o global.o $(LDFLAGS)
 
 src/main.o: src/main.c
 	$(CC) -c src/main.c $(CFLAGS)
@@ -19,6 +19,9 @@ src/snmp_task.o: src/snmp_task.c include/snmp_task.h
 
 src/helper.o: src/helper.c include/helper.h
 	$(CC) -c src/helper.c $(CFLAGS)
+
+src/global.o: src/global.c include/global.h
+	$(CC) -c src/global.c $(CFLAGS)
 
 clean:
 	rm -f src/*.o myprogram
