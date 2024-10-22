@@ -1,0 +1,45 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug myprogram",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "/home/dotlines-ubantu/Documents/SnmpWithRedis/DemoProject/myprogram",
+      "args": [],
+      "stopAtEntry": false,
+      "cwd": "/home/dotlines-ubantu/Documents/SnmpWithRedis/DemoProject",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "/usr/bin/gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ],
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "C/C++ Runner: Debug Session",
+      "type": "cppdbg",
+      "request": "launch",
+      "args": [],
+      "stopAtEntry": false,
+      "externalConsole": false,
+      "cwd": "/home/dotlines-ubantu/Documents/SnmpWithRedis/DemoProject/src",
+      "program": "/home/dotlines-ubantu/Documents/SnmpWithRedis/DemoProject/src/build/Debug/outDebug",
+      "MIMode": "gdb",
+      "miDebuggerPath": "gdb",
+      "setupCommands": [
+        {
+          "description": "Enable pretty-printing for gdb",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
+    }
+  ]
+}

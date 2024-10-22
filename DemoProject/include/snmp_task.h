@@ -6,6 +6,6 @@
 
 void init_snmp_task();
 void snmp_get_req(char str[], netsnmp_session session);
-void async_callback(int operation, struct snmp_session *session, int reqid,netsnmp_pdu *response);
+int async_callback(int operation, struct snmp_session *session, int reqid,netsnmp_pdu *response, void *magic);
 
 #endif

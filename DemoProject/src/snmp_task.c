@@ -2,8 +2,8 @@
 #include <net-snmp/net-snmp-includes.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "snmp_task.h"
 #include "global.h"
+#include "helper.h"
 
 #define PUSH_COMMAND "LPUSH"
 #define POP_COMMAND "LPOP"
@@ -17,6 +17,30 @@ netsnmp_session session, *ss;
 netsnmp_pdu *pdu;
 netsnmp_variable_list *vars;
 netsnmp_pdu *response;
+
+int async_callback(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response, void *magic)
+{
+
+    if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
+    {
+
+        for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
+        {
+            print_variable(vars->name, vars->name_length, vars);
+
+            printf("GET Response : ");
+            printCurrentTime();
+        }
+    }
+
+    else
+    {
+        // Handle error
+        fprintf(stderr, "Error receiving SNMP response\n");
+    }
+    active_snmp_req--;
+    return 1;
+}
 
 void init_snmp_task()
 {
@@ -44,7 +68,7 @@ void snmp_get_req(char str[], netsnmp_session session)
     if (!snmp_parse_oid(str, oid, &oid_len))
     {
         fprintf(stderr, "Failed to parse OID\n");
-        return 1;
+        return;
     }
 
     session.callback = async_callback;
@@ -62,27 +86,4 @@ void snmp_get_req(char str[], netsnmp_session session)
         snmp_perror("snmp_send");
         exit(1);
     }
-}
-
-void async_callback(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response)
-{
-
-    if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
-    {
-
-        for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
-        {
-            print_variable(vars->name, vars->name_length, vars);
-
-            printf("GET Response : ");
-            printCurrentTime();
-        }
-    }
-
-    else
-    {
-        // Handle error
-        fprintf(stderr, "Error receiving SNMP response\n");
-    }
-    active_snmp_req--;
 }

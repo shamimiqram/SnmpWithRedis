@@ -1,0 +1,22 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "gdb",  // Include debugging information
+                "/home/dotlines-ubantu/Documents/SnmpWithRedis/DemoProject/src/*.c",  // Compile all C files in the src directory
+                "-I", "/home/dotlines-ubantu/Documents/SnmpWithRedis/DemoProject/include",  // Include header files from the include directory
+                "-o", "/home/dotlines-ubantu/Documents/SnmpWithRedis/DemoProject/myprogram"  // Output executable
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Generated task by GCC"
+        }
+    ]
+}

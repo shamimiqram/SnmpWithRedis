@@ -51,7 +51,7 @@ void wait_for_response()
 
 void print_oid(oid *oid, size_t oid_len)
 {
-    for (size_t i = 0; i < 1; i++)
+    for (size_t i = 0; i < oid_len; i++)
     {
         if (i > 0)
         {
@@ -75,7 +75,7 @@ void print_variable_list(netsnmp_variable_list *vars)
         switch (vars->type)
         {
         case ASN_INTEGER:
-            printf("%d\n", *(vars->val.integer));
+            printf("%ld\n", *(vars->val.integer));
             break;
         case ASN_OCTET_STR:
             printf("%s\n", vars->val.string);
@@ -85,7 +85,7 @@ void print_variable_list(netsnmp_variable_list *vars)
             print_oid(vars->val.objid, vars->val_len);
             break;
         case ASN_IPADDRESS:
-            printf("IP Address: %d.%d.%d.%d\n",
+            printf("IP Address: %ld.%ld.%ld.%ld\n",
                    vars->val.integer[0], vars->val.integer[1],
                    vars->val.integer[2], vars->val.integer[3]);
             break;
