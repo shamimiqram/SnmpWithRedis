@@ -9,6 +9,7 @@
 #define PUSH_COMMAND "LPUSH"
 #define POP_COMMAND "LPOP"
 #define SET_COMMAND "SET"
+#define HSET_COMMAND "HSET"
 
 int active_req = 0;
 
@@ -287,7 +288,7 @@ int main(int argc, char **argv)
 
         strcpy(my_key, "oid_queue");
         strcpy(my_val, ".1.3.6.1.2.1.2.2.1.6.4");
-        //set_oid_in_redis(context, my_key, my_val);
+        set_oid_in_redis(context, my_key, my_val);
         
         str = get_oid_from_redis(context, my_key);
         //printf("Return string : %s\n", str);
