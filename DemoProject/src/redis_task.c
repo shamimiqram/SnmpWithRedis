@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <hiredis/hiredis.h>
-#include "redis_task.h"
 
 #define STORE "store_queue"
 #define OID "oid_que"
@@ -46,7 +45,7 @@ void set_value(const char *key, const char *field, const char *value)
         exit(1);
     }
 
-    printf("HSET command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
+    printf("Test : HSET command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
     freeReplyObject(reply);
 }
 

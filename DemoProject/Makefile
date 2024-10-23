@@ -1,12 +1,12 @@
 CC=gcc
 CFLAGS=-Iinclude -I/usr/include/net-snmp
 LDFLAGS=-lhiredis -lnetsnmp -lcjson
+TARGET = myprogram
 
+all: $(TARGET)
 
-all: myprogram
-
-myprogram: src/main.o src/redis_task.o src/snmp_task.o src/json_helper.o src/helper.o src/global.o
-	$(CC) -o myprogram main.o redis_task.o snmp_task.o  json_helper.o helper.o global.o $(LDFLAGS)
+$(TARGET): src/main.o src/redis_task.o src/snmp_task.o src/json_helper.o src/helper.o src/global.o
+	$(CC) -o $(TARGET) main.o redis_task.o snmp_task.o  json_helper.o helper.o global.o $(LDFLAGS)
 
 src/main.o: src/main.c
 	$(CC) -c src/main.c $(CFLAGS)
@@ -26,5 +26,8 @@ src/helper.o: src/helper.c include/helper.h
 src/global.o: src/global.c include/global.h
 	$(CC) -c src/global.c $(CFLAGS)
 
+gdb: $(TARGET)
+	gdb ./$(TARGET)
+
 clean:
-	rm -f src/*.o myprogram
+	rm -f src/*.o $(TARGET)
