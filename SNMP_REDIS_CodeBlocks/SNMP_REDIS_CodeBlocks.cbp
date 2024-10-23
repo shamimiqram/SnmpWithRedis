@@ -14,6 +14,12 @@
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
+				<Linker>
+					<Add library="snmp" />
+					<Add library="hiredis" />
+					<Add library="cjson" />
+					<LinkerExe value="CCompiler" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/SNMP_REDIS_CodeBlocks" prefix_auto="1" extension_auto="1" />
@@ -31,9 +37,29 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="global.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="global.h" />
+		<Unit filename="helper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="helper.h" />
+		<Unit filename="json_helper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="json_helper.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="redis_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="redis_task.h" />
+		<Unit filename="snmp_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="snmp_task.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

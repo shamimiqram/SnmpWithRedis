@@ -20,7 +20,7 @@ cJSON create_JSON_Object(char ip_address[], char version[], char comm_str[], cha
     cJSON_AddStringToObject(json_object, COMM_STR_KEY, comm_str);
     cJSON_AddStringToObject(json_object, PORT_INFO_KEY, port);
     cJSON_AddStringToObject(json_object, OID_INFO_KEY, oid);
-    cJSON_AddStringToObject(json_object, OP_INFO_KEY, &operation);
+    cJSON_AddNumberToObject(json_object, OP_INFO_KEY, operation);
 
     return *json_object;
 }
