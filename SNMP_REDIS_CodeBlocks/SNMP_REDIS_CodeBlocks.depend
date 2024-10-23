@@ -1,0 +1,55 @@
+# depslib dependency file v1.0
+1729492529 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/global.c
+
+1729594623 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/helper.c
+	<stdio.h>
+	<stdlib.h>
+	<sys/time.h>
+	<time.h>
+	<net-snmp/net-snmp-config.h>
+	<net-snmp/net-snmp-includes.h>
+	"global.h"
+
+1729499486 /home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/global.h
+
+1729593443 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/json_helper.c
+	<cjson/cJSON.h>
+	<stdio.h>
+	<stdlib.h>
+
+1729593500 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/main.c
+	<stdio.h>
+	<stdlib.h>
+	<cjson/cJSON.h>
+	"redis_task.h"
+	"snmp_task.h"
+	"json_helper.h"
+	"helper.h"
+
+1729488121 /home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/redis_task.h
+
+1729599844 /home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/snmp_task.h
+	<net-snmp/net-snmp-config.h>
+	<net-snmp/net-snmp-includes.h>
+
+1729514306 /home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/json_helper.h
+	<cjson/cJSON.h>
+
+1729493355 /home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/helper.h
+	<net-snmp/net-snmp-config.h>
+	<net-snmp/net-snmp-includes.h>
+
+1729659235 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/redis_task.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	<hiredis/hiredis.h>
+
+1729600054 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/SNMP_REDIS_CodeBlocks/snmp_task.c
+	<net-snmp/net-snmp-config.h>
+	<net-snmp/net-snmp-includes.h>
+	<stdio.h>
+	<stdlib.h>
+	"global.h"
+	"helper.h"
+
