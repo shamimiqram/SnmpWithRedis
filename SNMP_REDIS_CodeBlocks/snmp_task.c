@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "global.h"
 #include "helper.h"
+#include "redis_task.h"
 
 #define PUSH_COMMAND "LPUSH"
 #define POP_COMMAND "LPOP"
@@ -42,6 +43,30 @@ int async_callback(int operation, struct snmp_session *session, int reqid, netsn
     return 1;
 }
 
+int async_callback_with_hash_key(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response, void *magic)
+{
+    char *hash_key = (char *)magic;
+    printf("GET Response : key : %s", hash_key);
+    printCurrentTime();
+
+    if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
+    {
+
+        for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
+        {
+            print_variable(vars->name, vars->name_length, vars);
+        }
+    }
+
+    else
+    {
+        // Handle error
+        fprintf(stderr, "Error receiving SNMP response\n");
+    }
+    active_snmp_req--;
+    return 1;
+}
+
 void init_snmp_task()
 {
     init_snmp("snmpapp");
@@ -55,7 +80,51 @@ void init_snmp_task()
     session.community_len = strlen((const char *)session.community);
 }
 
-void snmp_get_req(char str[], netsnmp_session session)
+void init_snmp_with_ip(char *ip, char * ver, char* comm_str)
+{
+    init_snmp(ip);
+    snmp_sess_init(&session);
+    session.peername = strdup(ip);
+    session.version = SNMP_VERSION;
+    session.community = (u_char *)strdup(comm_str);
+    session.community_len = strlen((const char *)session.community);
+}
+
+void snmp_get_with_hash_key(char* str, char * hash_key)
+{
+    //printf("From here :\n\n%s \n\n %s\n\n", str, hash_key);
+    netsnmp_session *ss;
+    netsnmp_pdu *pdu;
+
+    ss = snmp_open(&session);
+    pdu = snmp_pdu_create(SNMP_MSG_GET);
+    oid oid[MAX_OID_LEN];
+    size_t oid_len = MAX_OID_LEN;
+    if (!snmp_parse_oid(str, oid, &oid_len))
+    {
+        fprintf(stderr, "Failed to parse OID\n");
+        return;
+    }
+
+    session.callback = async_callback_with_hash_key;
+    session.callback_magic = ss;
+    //printf("\n\nSend GET request: ");
+    printCurrentTime();
+    snmp_add_null_var(pdu, oid, oid_len);
+
+    int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, hash_key);
+    active_snmp_req++;
+    printf("Status : %d --- > ", status);
+    printCurrentTime();
+    if (status == 0)
+    {
+        snmp_perror("snmp_send");
+        exit(1);
+    }
+}
+
+
+void snmp_get_req(char str[])
 {
     netsnmp_session *ss;
     netsnmp_pdu *pdu;

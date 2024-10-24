@@ -1,9 +1,12 @@
+
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <hiredis/hiredis.h>
 #include <cjson/cJSON.h>
 #include "json_helper.h"
+#include "snmp_task.h"
 
 #define STORE "store_queue"
 #define OID "oid_que"
@@ -91,36 +94,43 @@ void set_oid_in_redis(char *key, char *val)
     // redisFree(context);
 }
 
+void proces_oid_data(char *ip, char * ver, char* comm_str, char *oid, char *hash_key, int op)
+{
+    //printf("%s -- %s -- %s --- %s---%s\n", ip, ver, comm_str, oid, hash_key);
+    init_snmp_with_ip(ip, ver, comm_str);
+    snmp_get_with_hash_key(oid, hash_key);
+}
+
+void parse_oid_data_from_json(cJSON *json )
+{
+    cJSON *device_ip = cJSON_GetObjectItem(json, "device_ip"); // all hard coded string should be replace with constant or define value
+    cJSON *snmp_version = cJSON_GetObjectItem(json, "snmp_version");
+    cJSON *snmp_community_str = cJSON_GetObjectItem(json, "snmp_community_str");
+    cJSON *oid_info = cJSON_GetObjectItem(json, "oid_info");
+
+    printf("IP : %s\n", device_ip->valuestring);
+
+     cJSON *item;
+     cJSON_ArrayForEach(item, oid_info) {
+        cJSON *snmpget = cJSON_GetObjectItem(item, "snmpget");
+        cJSON *snmpwalk = cJSON_GetObjectItem(item, "snmpwalk");
+        cJSON *redis_map_key = cJSON_GetObjectItem(item, "redis_map_key");
+
+        // Print the redis_map_key
+        printf("Redis Map Key: %s\n", redis_map_key->valuestring);
+
+        cJSON *snmpget_value;
+        cJSON_ArrayForEach(snmpget_value, snmpget) {
+            proces_oid_data(device_ip->valuestring, snmp_version ->valuestring, snmp_community_str->valuestring, snmpget_value->valuestring, redis_map_key->valuestring, 1);
+           // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
+        }
+    }
+}
+
 char *get_oid_from_redis(char *key)
 {
-    /*const char *command = "GET ";
-    size_t len1 = strlen(command);
-    size_t len2 = strlen(key);
-    char *command_key = (char *)malloc(len1 + len2 + 1);
-    strcpy(command_key, command); // Copy str1 to result
-    strcat(command_key, key);*/
-    char *oid_str;
     printf("%s\n", key);
-    FILE *file = fopen("output.txt", "w");
-
-    /*redisReply *existsReply = redisCommand(redis, "KEYS *");
-    if (existsReply == NULL) {
-        printf("Failed to execute EXISTS command\n");
-        redisFree(redis);
-        return 1;
-    }
-
-    else if(existsReply->str == NULL)
-    {
-
-        printf("I am here");
-    }
-    oid_str = (char *)malloc(strlen(existsReply->str) + 1);
-    strcpy(oid_str, existsReply->str);
-
-    printf("Keys : %s\n", oid_str);
-*/
-    int start = 0, end = 1;
+    int start = 0, end = 9;
     redisReply *getReply = (redisReply *)redisCommand(redis, "LRANGE %s %d %d",key, start, end);
     if (getReply == NULL)
     {
@@ -131,34 +141,19 @@ char *get_oid_from_redis(char *key)
 
     if (getReply->type == REDIS_REPLY_STRING)
     {
-         printf("Key: mykey, Value: %s\n", getReply->str);
+         printf("String Value: %s\n", getReply->str);
     }
     else if(getReply->type == REDIS_REPLY_ARRAY)
     {
-        printf("%d\n", getReply->elements );
-        //oid_str = (char *)malloc((getReply->elements[0]->str) + 1) * getReply->elements + 1);
-
-         for (size_t i = 0; i < getReply->elements; i++) {
-            // Each element is of type REDIS_REPLY_STRING
-            if (getReply->element[i]->type == REDIS_REPLY_STRING) {
-
+         for (size_t i = 0; i < getReply->elements; i++)
+         {
+               if (getReply->element[i]->type == REDIS_REPLY_STRING)
+               {
                     cJSON *json = cJSON_Parse(getReply->element[i]->str);
-                    printf("Total String : \n\n\n%s\n", cJSON_Print(json));
-                    fprintf(file, "%s\n", cJSON_Print(json));
-                    /*cJSON *child = json->string;
-                    while(json != NULL)
-                    {
+                    parse_oid_data_from_json(json);
+               }
 
-                        printf("Total String : \n\n\n%s\n", cJSON_Print(child));
-                        fprintf(file, "Hello, World!\n");
-                        json = json->next;
-
-                    }*/
-
-            } else {
-                printf("  Item %zu: Not a string\n", i);
-            }
-        }
+         }
     }
     else
     {
@@ -166,11 +161,8 @@ char *get_oid_from_redis(char *key)
         return key;
     }
 
-    //oid_str = (char *)malloc(strlen(getReply->str) + 1);
-   // strcpy(oid_str, getReply->str);
     freeReplyObject(getReply);
-    // redisFree(context);
-    oid_str = "Free";
+    char * oid_str = "Free";
     return oid_str;
 }
 

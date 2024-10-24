@@ -43,21 +43,21 @@ int main()
     connect_redis();
     const char *key = "EYE:SNMP_PENDING";
     //set_values();
-    get_values();
+    //get_values();
 
     char *oid_ret_str;
     oid_ret_str = get_oid_from_redis(key);
-    printf("\n\n Total reply \n\n %s\n", oid_ret_str);
-    json_task();
+    //printf("\n\n Total reply \n\n %s\n", oid_ret_str);
+    //json_task();
     // Example data for HSET
     //const char *key = "first";
-    const char *field = "name";
-    const char *value = "VS_Code";
+   // const char *field = "name";
+   // const char *value = "VS_Code";
 
     // Set the value in Redis
-    set_value(key, field, value);
+    //set_value(key, field, value);
 
-    init_snmp_task();
+    //init_snmp_task();
 
     // Example OID and value for SNMP
     //const char *oid = ".1.3.6.1.2.1.1.5.0.2"; // Change this to your desired OID
@@ -65,6 +65,7 @@ int main()
 
     // Set the SNMP value
     // Clean up Redis connection
+    wait_for_response();
     free_redis();
     return 0;
 }
