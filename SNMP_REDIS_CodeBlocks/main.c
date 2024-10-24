@@ -9,10 +9,10 @@
 void json_task()
 {
     cJSON *json_object = cJSON_CreateObject();
-    
+
     // Add data to the JSON object
 
- 
+
     cJSON_AddStringToObject(json_object, "device_ip", "127.0.0.1");
     cJSON_AddStringToObject(json_object, "oid", ".1.1.1.3.4.5.6.7.8");
     cJSON_GetObjectItem(json_object, "name");
@@ -41,9 +41,16 @@ int main()
 {
     // Connect to Redis
     connect_redis();
+    const char *key = "EYE:SNMP_PENDING";
+    //set_values();
+    get_values();
+
+    char *oid_ret_str;
+    oid_ret_str = get_oid_from_redis(key);
+    printf("\n\n Total reply \n\n %s\n", oid_ret_str);
     json_task();
     // Example data for HSET
-    const char *key = "first";
+    //const char *key = "first";
     const char *field = "name";
     const char *value = "VS_Code";
 
