@@ -68,6 +68,30 @@ void set_value(const char *key, const char *field, const char *value)
     freeReplyObject(reply);
 }
 
+void save_oid_ret_with_hash(char * redis_map_key, char* oid, char* value)
+{
+
+    // Create a JSON object
+    cJSON *json = cJSON_CreateObject();
+    cJSON *json_val = cJSON_CreateObject();
+
+    // Add OIDs and values
+    cJSON_AddStringToObject(json_val, oid, value);
+
+    cJSON_AddItemToObject(json, redis_map_key, json_val);
+
+    // Convert JSON object to string
+    char *json_str = cJSON_Print(json);
+
+    // Push the JSON string into the Redis list
+    redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s", json_str);
+
+    // Clean up
+    cJSON_Delete(json);    // Free the JSON object
+    cJSON_Delete(json_val);
+    free(json_str);
+}
+
 void set_oid_in_redis(char *key, char *val)
 {
     const char *command = "SET ";
@@ -130,7 +154,7 @@ void parse_oid_data_from_json(cJSON *json )
 char *get_oid_from_redis(char *key)
 {
     printf("%s\n", key);
-    int start = 0, end = 9;
+    int start = 0, end = 0;
     redisReply *getReply = (redisReply *)redisCommand(redis, "LRANGE %s %d %d",key, start, end);
     if (getReply == NULL)
     {

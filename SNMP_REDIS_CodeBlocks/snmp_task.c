@@ -43,6 +43,43 @@ int async_callback(int operation, struct snmp_session *session, int reqid, netsn
     return 1;
 }
 
+
+char* format_variable(netsnmp_variable_list *var) {
+    char buffer[1024];
+    size_t buffer_length = sizeof(buffer);
+    char *result = NULL;
+
+    // Convert the OID to a string
+    if (1 < 6) {
+        // Prepare the output string based on the variable type
+        switch (var->type) {
+            case ASN_INTEGER:
+                result = malloc(256);
+                snprintf(result, 256, "OID: %s, Value: %d", buffer, *var->val.integer);
+                break;
+            case ASN_OCTET_STR:
+                result = malloc(256);
+                snprintf(result, 256, "OID: %s, Value: %s", buffer, (char *)var->val.string);
+                break;
+            case ASN_IPADDRESS: {
+                // Format the IP address from val.string
+                unsigned char *ip = var->val.string;
+                result = malloc(256);
+                snprintf(result, 256, "OID: %s, Value: %d.%d.%d.%d",
+                         buffer, ip[0], ip[1], ip[2], ip[3]);
+                break;
+            }
+            default:
+                result = malloc(256);
+                snprintf(result, 256, "OID: %s, Unknown type: %d", buffer, var->type);
+        }
+    } else {
+        result = strdup("Failed to convert OID to string");
+    }
+
+    return result;
+}
+
 int async_callback_with_hash_key(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response, void *magic)
 {
     char *hash_key = (char *)magic;
@@ -56,6 +93,8 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
         {
             print_variable(vars->name, vars->name_length, vars);
         }
+         char *result = format_variable(vars);
+         printf("Result : %s\n", vars);
     }
 
     else
