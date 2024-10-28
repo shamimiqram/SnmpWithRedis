@@ -1,10 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cjson/cJSON.h>
-#include "redis_task.h"
-#include "snmp_task.h"
-#include "json_helper.h"
-#include "helper.h"
+#include "all.h"
+
 
 void json_task()
 {

@@ -1,2 +1,3 @@
+#include "all.h"
 
-int active_snmp_req = 0; // 
+int active_snmp_req = 0; //

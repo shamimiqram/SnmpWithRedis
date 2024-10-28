@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "all.h"
+
 #define IP_INFO_KEY "device_ip"
 #define VER_INFO_KEY "snmp_version"
 #define COMM_STR_KEY "snmp_community_str"

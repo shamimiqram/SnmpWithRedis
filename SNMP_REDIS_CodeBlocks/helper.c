@@ -4,11 +4,12 @@
 #include <time.h>
 #include <net-snmp/net-snmp-config.h>
 #include <net-snmp/net-snmp-includes.h>
-#include "global.h"
+
+#include "all.h"
 
 void printCurrentTime()
 {
-
+    return;
     struct timeval tv;
     struct tm *ptm;
     char timeString[40];

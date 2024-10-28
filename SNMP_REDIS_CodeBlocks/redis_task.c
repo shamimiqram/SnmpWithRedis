@@ -1,12 +1,11 @@
-
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <hiredis/hiredis.h>
 #include <cjson/cJSON.h>
-#include "json_helper.h"
-#include "snmp_task.h"
+
+#include "all.h"
+
 
 #define STORE "store_queue"
 #define OID "oid_que"
@@ -53,9 +52,10 @@ void connect_redis()
     freeReplyObject(reply);
 }
 
-void set_value(const char *key, const char *field, const char *value)
+void set_value(const char *key, const char *value)
 {
-    redisReply *reply = (redisReply *)redisCommand(redis, "HSET %s %s %s", key, field, value);
+    //RPUSH EYE:SNMP_RESULT {<redis_map_key> : { <oid> : <oid value>, <oid> : <oid value> }}
+    redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s %s", key, value);
 
     if (reply == NULL)
     {
@@ -64,7 +64,7 @@ void set_value(const char *key, const char *field, const char *value)
         exit(1);
     }
 
-    printf("Test : HSET command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
+    printf("Test : RPUSH command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
     freeReplyObject(reply);
 }
 
@@ -141,12 +141,13 @@ void parse_oid_data_from_json(cJSON *json )
         cJSON *redis_map_key = cJSON_GetObjectItem(item, "redis_map_key");
 
         // Print the redis_map_key
-        printf("Redis Map Key: %s\n", redis_map_key->valuestring);
+        //printf("Redis Map Key: %s\n", redis_map_key->valuestring);
 
         cJSON *snmpget_value;
         cJSON_ArrayForEach(snmpget_value, snmpget) {
             proces_oid_data(device_ip->valuestring, snmp_version ->valuestring, snmp_community_str->valuestring, snmpget_value->valuestring, redis_map_key->valuestring, 1);
            // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
+           //break;
         }
     }
 }
@@ -154,7 +155,7 @@ void parse_oid_data_from_json(cJSON *json )
 char *get_oid_from_redis(char *key)
 {
     printf("%s\n", key);
-    int start = 0, end = 0;
+    int start = 0, end = 10;
     redisReply *getReply = (redisReply *)redisCommand(redis, "LRANGE %s %d %d",key, start, end);
     if (getReply == NULL)
     {
@@ -176,7 +177,7 @@ char *get_oid_from_redis(char *key)
                     cJSON *json = cJSON_Parse(getReply->element[i]->str);
                     parse_oid_data_from_json(json);
                }
-
+            //break;
          }
     }
     else
