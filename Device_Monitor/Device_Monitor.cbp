@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Device_Monitor" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Device_Monitor" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+				<Linker>
+					<Add library="snmp" />
+					<Add library="hiredis" />
+					<Add library="cjson" />
+					<LinkerExe value="CCompiler" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Device_Monitor" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="Headers/all.h" />
+		<Unit filename="Headers/global.h" />
+		<Unit filename="Headers/helper.h" />
+		<Unit filename="Headers/json_helper.h" />
+		<Unit filename="Headers/redis_task.h" />
+		<Unit filename="Headers/snmp_task.h" />
+		<Unit filename="Others/config.txt" />
+		<Unit filename="Sources/global.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/helper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/json_helper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/redis_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/snmp_task.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="header_files.h" />
+		<Extensions>
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
