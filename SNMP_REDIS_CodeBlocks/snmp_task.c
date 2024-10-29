@@ -18,55 +18,74 @@ netsnmp_pdu *pdu;
 netsnmp_variable_list *vars;
 netsnmp_pdu *response;
 
-void print_oid_2(oid *oid, size_t oid_len) {
-    for (size_t i = 0; i < 1; i ++){
-        if (i > 0) {
-            printf(".");
+char*  print_oid_2(oid *oid, size_t oid_len)
+{
+    char *buffer;
+    buffer = malloc(1024);
+    
+    for (size_t i = 0; i < oid_len; i++)
+    {
+        if (i > 0)
+        {
+            strcat(buffer,".");
         }
-        printf("%ld", oid[i]);
+        char str[20];
+        sprintf(str, "%ld", oid[i]);
+        if(i == 0)
+        {
+            strcpy(buffer,str);
+        }
+        else{
+            strcat(buffer,str);
+        }
     }
-    //printf("printed \n");
+    //printf("OID BUFFER : %s\n",buffer);
+    return buffer;
+    // printf("printed \n");
 }
 
-void print_variable_list_2(netsnmp_variable_list *vars) {
+void print_variable_list_2(netsnmp_variable_list *vars)
+{
 
-    while (vars) {
+    while (vars)
+    {
 
-        //print_oid_2(vars->name, vars->name_length);
+        // print_oid_2(vars->name, vars->name_length);
 
         // Handle different variable types
-        switch (vars->type) {
-            case ASN_INTEGER:
-                printf("INTEGER : %d\n", *(vars->val.integer));
-                break;
-            case ASN_OCTET_STR:
-                printf("%s\n", vars->val.string);
-                break;
-            case ASN_OBJECT_ID:
-                printf("OID value\n");
-                print_oid(vars->val.objid, vars->val_len);
-                break;
-            case ASN_IPADDRESS:
-                printf("IP Address: %d.%d.%d.%d\n",
-                       vars->val.integer[0], vars->val.integer[1],
-                       vars->val.integer[2], vars->val.integer[3]);
-                break;
+        switch (vars->type)
+        {
+        case ASN_INTEGER:
+            printf("INTEGER : %d\n", *(vars->val.integer));
+            break;
+        case ASN_OCTET_STR:
+            printf("%s\n", vars->val.string);
+            break;
+        case ASN_OBJECT_ID:
+            printf("OID value\n");
+            print_oid(vars->val.objid, vars->val_len);
+            break;
+        case ASN_IPADDRESS:
+            printf("IP Address: %d.%d.%d.%d\n",
+                   vars->val.integer[0], vars->val.integer[1],
+                   vars->val.integer[2], vars->val.integer[3]);
+            break;
 
-            case ASN_COUNTER:
-                printf("Counter: %u\n", *(vars->val.counter64));
-                break;
-            case ASN_GAUGE:
-                printf("Gauge32 : %u\n", *(vars->val.counter64));
-                break;
-            case ASN_TIMETICKS:
-                printf("Value: %u\n", *(vars->val.integer));
-                break;
-            default:
-                printf("Unknown type\n");
-                break;
+        case ASN_COUNTER:
+            printf("Counter: %u\n", *(vars->val.counter64));
+            break;
+        case ASN_GAUGE:
+            printf("Gauge32 : %u\n", *(vars->val.counter64));
+            break;
+        case ASN_TIMETICKS:
+            printf("Value: %u\n", *(vars->val.integer));
+            break;
+        default:
+            printf("Unknown type\n");
+            break;
         }
         vars = vars->next_variable;
-        //vars = vars->next_variable;  // Move to the next variable in the list
+        // vars = vars->next_variable;  // Move to the next variable in the list
     }
 }
 
@@ -79,11 +98,11 @@ int async_callback(int operation, struct snmp_session *session, int reqid, netsn
         for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
         {
             print_variable(vars->name, vars->name_length, vars);
-            //printf("\n\n\n");
-            //print_variable_list_2(vars);
+            // printf("\n\n\n");
+            // print_variable_list_2(vars);
 
-           // printf("GET Response : ");
-           // printCurrentTime();
+            // printf("GET Response : ");
+            // printCurrentTime();
         }
     }
 
@@ -141,7 +160,7 @@ char *format_variable(netsnmp_variable_list *var)
 int async_callback_with_hash_key(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response, void *magic)
 {
     char *hash_key = (char *)magic;
-    //printf("GET Response : key : %s", hash_key);
+    // printf("GET Response : key : %s", hash_key);
     printCurrentTime();
 
     if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
@@ -149,16 +168,22 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
 
         for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
         {
-            //print_variable_list_2(vars);
-             char buffer[1024];
-             size_t buffer_length = sizeof(buffer);
+            ;
+            char buffer[1024];
+            size_t buffer_length = sizeof(buffer);
             snprint_variable(buffer, buffer_length, vars->name, vars->name_length, vars);
-             printf("Result : %s\n", buffer);
-             set_value(hash_key, buffer);
-    }
-        }
-        //char *result = format_variable(vars);
+            printf("%s\n", buffer);
 
+            char* ret = malloc(1024);
+            char* oid = malloc(1024);
+            oid = print_oid_2(vars->name, vars->name_length);
+            printf("%s\n", oid);
+            ret =  format_oid_result_json(buffer, hash_key, oid);
+            //printf("%s\n", ret);
+            //set_value_with_json(hash_key, ret);
+        }
+    }
+    // char *result = format_variable(vars);
 
     else
     {
@@ -216,8 +241,8 @@ void snmp_get_with_hash_key(char *str, char *hash_key)
 
     int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, hash_key);
     active_snmp_req++;
-    printf("Status : %d --- > ", status);
-    //printCurrentTime();
+    //printf("Status : %d --- > ", status);
+    // printCurrentTime();
     if (status == 0)
     {
         snmp_perror("snmp_send");
@@ -249,7 +274,7 @@ void snmp_get_req(char str[])
 
     int status = snmp_async_send(ss, pdu, async_callback, NULL);
     active_snmp_req++;
-    //printf("Status : %d --- > ", status);
+    // printf("Status : %d --- > ", status);
     printCurrentTime();
     if (status == 0)
     {
@@ -257,6 +282,3 @@ void snmp_get_req(char str[])
         exit(1);
     }
 }
-
-
-

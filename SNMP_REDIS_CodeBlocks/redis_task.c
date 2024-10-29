@@ -52,6 +52,26 @@ void connect_redis()
     freeReplyObject(reply);
 }
 
+
+void set_value_with_json(const char *key, char* oid, char* json_str)
+{
+    cJSON *json_object = cJSON_CreateObject();
+    cJSON_AddStringToObject(json_object, oid, json_str);
+    char * json_string = malloc(1024);
+    json_string = cJSON_Print(json_object);
+    redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s %s", key, json_string);
+    if (reply == NULL)
+    {
+        printf("Error: %s\n", redis->errstr);
+        redisFree(redis);
+        exit(1);
+    }
+
+    printf("Test : RPUSH command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
+    freeReplyObject(reply);
+    printf("RPUSH EYE:SNMP_RESULT %s  %s", key, json_string);
+}
+
 void set_value(const char *key, const char *value)
 {
     //RPUSH EYE:SNMP_RESULT {<redis_map_key> : { <oid> : <oid value>, <oid> : <oid value> }}
@@ -132,7 +152,7 @@ void parse_oid_data_from_json(cJSON *json )
     cJSON *snmp_community_str = cJSON_GetObjectItem(json, "snmp_community_str");
     cJSON *oid_info = cJSON_GetObjectItem(json, "oid_info");
 
-    printf("IP : %s\n", device_ip->valuestring);
+    //printf("IP : %s\n", device_ip->valuestring);
 
      cJSON *item;
      cJSON_ArrayForEach(item, oid_info) {
@@ -147,14 +167,14 @@ void parse_oid_data_from_json(cJSON *json )
         cJSON_ArrayForEach(snmpget_value, snmpget) {
             proces_oid_data(device_ip->valuestring, snmp_version ->valuestring, snmp_community_str->valuestring, snmpget_value->valuestring, redis_map_key->valuestring, 1);
            // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
-           //break;
+           break;
         }
     }
 }
 
 char *get_oid_from_redis(char *key)
 {
-    printf("%s\n", key);
+    //printf("%s\n", key);
     int start = 0, end = 10;
     redisReply *getReply = (redisReply *)redisCommand(redis, "LRANGE %s %d %d",key, start, end);
     if (getReply == NULL)
@@ -177,7 +197,7 @@ char *get_oid_from_redis(char *key)
                     cJSON *json = cJSON_Parse(getReply->element[i]->str);
                     parse_oid_data_from_json(json);
                }
-            //break;
+            break;
          }
     }
     else
@@ -208,7 +228,7 @@ void set_values() {
 }
 
 void get_values() {
-    for (int i = 1; i <= 10; i++) {
+    for (int i = 1; i <= 0; i++) {
         char field[20];
         snprintf(field, sizeof(field), "field%d", i);
 

@@ -35,6 +35,13 @@ void json_task()
     cJSON_Delete(json_object);
 }
 
+void print_string()
+{
+
+    //char str[] =  "{\"EYE:MONITORING_DATA::8361b72f-886d-4e80-8357-8041a897d613::48560\":{\"1.3.6.1.2.1.1.3.0\":{\"oid\":\"sysUpTimeInstance\",\"type\":\"TICKS\",\"value\":\"2743205300\"},\"1.3.6.1.2.1.25.2.3.1.5.65536\":{\"oid\":\"hrStorageSize.65536\",\"type\":\"INTEGER\",\"value\":\"8257536\"},\"1.3.6.1.2.1.25.3.3.1.2.1\":{\"oid\":\"hrProcessorLoad.1\",\"type\":\"INTEGER\",\"value\":\"10\"}}}\";
+   // printf("%s\n", str); //"RPUSH EYE:SNMP_RESULT"
+}
+
 int main()
 {
     // Connect to Redis
@@ -42,7 +49,7 @@ int main()
     const char *key = "EYE:SNMP_PENDING";
     //set_values();
     //get_values();
-
+    print_string();
     char *oid_ret_str;
     oid_ret_str = get_oid_from_redis(key);
     //printf("\n\n Total reply \n\n %s\n", oid_ret_str);

@@ -99,3 +99,58 @@ void print_variable_list(netsnmp_variable_list *vars)
         // vars = vars->next_variable;  // Move to the next variable in the list
     }
 }
+
+char* format_oid_result_json(char *result, char* key, char* oid)
+{
+    char *ret_oid = malloc(256);
+    char *type = malloc (256);
+    char *value = malloc(256);
+    int token_cnt = 0;
+
+    const char *delemeter = " :\\";
+    char *token = strtok(result, delemeter);
+    char *no = "No";
+    char * equal = "=";
+
+    // Continue to tokenize the string until strtok returns NULL
+    while (token != NULL)
+    {
+
+        if (strcmp(token, no) == 0)
+        {
+            //printf("No data\n");
+            type = "";
+            value = "";
+            break;
+        }
+        else if(strcmp(token, equal) == 0)
+        {
+           // printf("equal sign \n");
+        }
+        else if(token_cnt == 0)
+        {
+            strcpy(ret_oid, token);
+            token_cnt++;
+        }
+        else if(token_cnt == 1)
+        {
+            strcpy(type, token);
+            token_cnt++;
+        }
+        else if(token_cnt == 2)
+        {
+            strcpy(value, token);
+            token_cnt++;
+        }
+        else strcat(value, token);
+
+       printf("Token: %s \n", token, result);
+        token = strtok(NULL, delemeter); // Get the next token
+    }
+
+    char* ret = malloc(1024);
+    ret =  oid_info_to_json(ret_oid, type, value);
+    printf(" Oid : %s\n", oid);
+    set_value_with_json(key, oid, ret);
+    return ret;
+}
