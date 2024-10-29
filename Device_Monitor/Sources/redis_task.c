@@ -7,11 +7,8 @@
 #include "../header_files.h"
 
 
-#define STORE "store_queue"
-#define OID "oid_que"
 #define REDIS_IP "103.239.252.139"
 #define REDIS_PORT 6379
-#define HASH_NAME "myhash"
 #define PASS "Nopass1234"
 
 redisContext *redis = NULL;
@@ -92,7 +89,7 @@ void parse_oid_data_from_json(cJSON *json )
      cJSON *item;
      cJSON_ArrayForEach(item, oid_info) {
         cJSON *snmpget = cJSON_GetObjectItem(item, "snmpget");
-        //cJSON *snmpwalk = cJSON_GetObjectItem(item, "snmpwalk");
+        cJSON *snmpwalk = cJSON_GetObjectItem(item, "snmpwalk");
         cJSON *redis_map_key = cJSON_GetObjectItem(item, "redis_map_key");
 
         // Print the redis_map_key

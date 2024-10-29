@@ -3,6 +3,10 @@
 #define MAX_LINES 100
 
 int active_snmp_req = 0; //
+char *redis_key = "EYE:SNMP_PENDING";
+char *redis_ip = "103.239.252.139";
+int redis_port =  6379;
+char *redis_pass = "Nopass1234";
 
 int read_config_file(char *filename, char **lines) {
     FILE *file = fopen(filename, "r");

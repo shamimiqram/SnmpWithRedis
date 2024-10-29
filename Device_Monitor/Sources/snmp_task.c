@@ -6,14 +6,6 @@
 #include "../Headers/helper.h"
 #include "../header_files.h"
 
-#define PUSH_COMMAND "LPUSH"
-#define POP_COMMAND "LPOP"
-#define SET_COMMAND "SET"
-#define HSET_COMMAND "HSET"
-#define SNMP_VERSION SNMP_VERSION_2c
-#define COMMUNITY_STRING "audramonitor"
-#define HOST_IP "103.218.25.9"
-
 netsnmp_session session, *ss;
 netsnmp_pdu *pdu;
 netsnmp_variable_list *vars;
@@ -81,13 +73,34 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
     return 1;
 }
 
+long version_convert(char *ver)
+{
+    long ver_info;
+
+    if(strcmp(ver, "SNMPv1") == 0)
+    {
+        ver_info = SNMP_VERSION_1;
+    }
+    else if(strcmp(ver, "SNMPv2c") == 0)
+    {
+        ver_info = SNMP_VERSION_2c;
+    }
+    else if(strcmp(ver, "SNMPv3") == 0)
+    {
+        ver_info = SNMP_VERSION_3;
+    }
+    else ver_info = SNMP_VERSION_2c;
+
+    return ver_info;
+}
+
 void init_snmp_server(char *ip, char *ver, char *comm_str)
 {
     init_snmp(ip);
     //active_snmp_req = 0;
     snmp_sess_init(&session);
     session.peername = strdup(ip);
-    session.version = SNMP_VERSION;
+    session.version = version_convert(ver);
     session.community = (u_char *)strdup(comm_str);
     session.community_len = strlen((const char *)session.community);
 }
