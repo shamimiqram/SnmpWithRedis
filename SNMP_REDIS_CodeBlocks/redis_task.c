@@ -169,7 +169,7 @@ void parse_oid_data_from_json(cJSON *json )
         cJSON_ArrayForEach(snmpget_value, snmpget) {
             proces_oid_data(device_ip->valuestring, snmp_version ->valuestring, snmp_community_str->valuestring, snmpget_value->valuestring, redis_map_key->valuestring, 1);
            // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
-           break;
+           //break;
         }
     }
 }
@@ -199,7 +199,7 @@ char *get_oid_from_redis(char *key)
                     cJSON *json = cJSON_Parse(getReply->element[i]->str);
                     parse_oid_data_from_json(json);
                }
-            break;
+            //break;
          }
     }
     else
