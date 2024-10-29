@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <cjson/cJSON.h>
+
+#include "helper.h"
 #include "all.h"
 
 
@@ -52,7 +54,7 @@ int main()
     print_string();
     char *oid_ret_str;
     oid_ret_str = get_oid_from_redis(key);
-    //printf("\n\n Total reply \n\n %s\n", oid_ret_str);
+    printf("Request done for : %s \n", oid_ret_str);
     //json_task();
     // Example data for HSET
     //const char *key = "first";

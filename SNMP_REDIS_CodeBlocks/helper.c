@@ -20,7 +20,6 @@ void printCurrentTime()
 }
 void wait_for_response()
 {
-
     while (active_snmp_req)
     {
         int fds = 0, block = 1;
@@ -46,7 +45,7 @@ void wait_for_response()
     for (int i = 0; i < 1; i++)
     {
         scanf("%d", &x);
-        printf("%d --\n", x);
+        printf("--Exit--\n");
     }
 }
 
@@ -148,9 +147,9 @@ char* format_oid_result_json(char *result, char* key, char* oid)
         token = strtok(NULL, delemeter); // Get the next token
     }
 
-    char* ret = malloc(1024);
+    cJSON ret;
     ret =  oid_info_to_json(ret_oid, type, value);
     printf(" Oid : %s\n", oid);
-    set_value_with_json(key, oid, ret);
-    return ret;
+    set_value_with_json(key, oid, &ret);
+    return ret_oid;
 }

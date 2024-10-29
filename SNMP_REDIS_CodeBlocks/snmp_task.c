@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "helper.h"
 #include "all.h"
 
 #define PUSH_COMMAND "LPUSH"
@@ -22,7 +23,7 @@ char*  print_oid_2(oid *oid, size_t oid_len)
 {
     char *buffer;
     buffer = malloc(1024);
-    
+
     for (size_t i = 0; i < oid_len; i++)
     {
         if (i > 0)

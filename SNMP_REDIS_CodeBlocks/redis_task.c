@@ -53,13 +53,15 @@ void connect_redis()
 }
 
 
-void set_value_with_json(const char *key, char* oid, char* json_str)
+void set_value_with_json(const char *key, char* oid, cJSON *json_data)
 {
-    cJSON *json_object = cJSON_CreateObject();
-    cJSON_AddStringToObject(json_object, oid, json_str);
-    char * json_string = malloc(1024);
-    json_string = cJSON_Print(json_object);
-    redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s %s", key, json_string);
+    cJSON *json_obj = cJSON_CreateObject();
+    cJSON *json_item = cJSON_CreateObject();
+    cJSON_AddItemReferenceToObject(json_item, oid, json_data);
+    cJSON_AddItemReferenceToObject(json_obj, key, json_item);
+    char * json_str = malloc(1024);
+    json_str= cJSON_PrintUnformatted(json_obj);
+    redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s", json_str);
     if (reply == NULL)
     {
         printf("Error: %s\n", redis->errstr);
@@ -69,7 +71,7 @@ void set_value_with_json(const char *key, char* oid, char* json_str)
 
     printf("Test : RPUSH command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
     freeReplyObject(reply);
-    printf("RPUSH EYE:SNMP_RESULT %s  %s", key, json_string);
+    printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
 }
 
 void set_value(const char *key, const char *value)
