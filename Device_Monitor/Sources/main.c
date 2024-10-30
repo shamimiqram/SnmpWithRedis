@@ -10,7 +10,7 @@ void device_monitor()
 {
     int command = 0;
     int start_pos = 0, list_cnt = 10;
-    bool is_trim_enable = false;
+    bool is_trim_enable = true;
     while(command != -1)
     {
         printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
