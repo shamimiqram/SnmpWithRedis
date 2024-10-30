@@ -11,8 +11,7 @@
 #define OID_INFO_KEY "oid"
 #define OP_INFO_KEY "operation_type"
 
-
-cJSON oid_info_to_json(char* oid, char* type, char* value)
+cJSON oid_info_to_json(char *oid, char *type, char *value)
 {
     cJSON *json_object = cJSON_CreateObject();
 
@@ -20,10 +19,10 @@ cJSON oid_info_to_json(char* oid, char* type, char* value)
     cJSON_AddStringToObject(json_object, "type", type);
     cJSON_AddStringToObject(json_object, "value", value);
 
-   // printf("%s\n",cJSON_Print(json_object) );
-    //char * json_string = malloc(1024);
-    //json_string = cJSON_Print(json_object);
-    //printf("%s\n", json_string);
+    // printf("%s\n",cJSON_Print(json_object) );
+    // char * json_string = malloc(1024);
+    // json_string = cJSON_Print(json_object);
+    // printf("%s\n", json_string);
     return *json_object;
 }
 
@@ -54,4 +53,4 @@ char *perse_data_from_json(cJSON *json_object, char key[])
 }
 
 // cJSON *json = cJSON_Parse(json_string);
-//char *string = cJSON_Print(json);
+// char *string = cJSON_Print(json);

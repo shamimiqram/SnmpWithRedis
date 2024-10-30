@@ -37,7 +37,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="Headers/all.h" />
 		<Unit filename="Headers/global.h" />
 		<Unit filename="Headers/helper.h" />
 		<Unit filename="Headers/json_helper.h" />

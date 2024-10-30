@@ -3,5 +3,6 @@
 
 void init_snmp_server(char *ip, char *ver, char *comm_str);
 void snmp_get_with_hash_key(char *str, char *hash_key);
+void snmp_walk_with_hash_key(char *str, char *hash_key);
 
 #endif
