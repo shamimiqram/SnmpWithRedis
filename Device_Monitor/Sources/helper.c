@@ -97,7 +97,7 @@ void print_variable_list(netsnmp_variable_list *vars)
     }
 }
 
-char *format_oid_result_json(char *result, char *key, char *oid)
+void format_oid_result_json(char *result, char *key, char *oid)
 {
     char *ret_oid = malloc(256);
     char *type = malloc(256);
@@ -150,7 +150,6 @@ char *format_oid_result_json(char *result, char *key, char *oid)
     ret = oid_info_to_json(ret_oid, type, value);
     printf(" Oid : %s\n", oid);
     set_value_with_json(key, oid, &ret);
-    return ret_oid;
 }
 
 int read_config_file(char *filename, char lines[MAX_LINES][MAX_LENGTH])

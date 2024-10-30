@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1730283243 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/helper.c
+1730285674 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/helper.c
 	<stdio.h>
 	<stdlib.h>
 	<sys/time.h>
@@ -19,7 +19,7 @@
 1730277063 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/json_helper.h
 	<cjson/cJSON.h>
 
-1730282858 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/helper.h
+1730285559 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/helper.h
 	<net-snmp/net-snmp-config.h>
 	<net-snmp/net-snmp-includes.h>
 	<cjson/cJSON.h>
@@ -37,14 +37,15 @@
 	<stdlib.h>
 	"../header_files.h"
 
-1730280622 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
+1730285192 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
 	<stdio.h>
+	<stdbool.h>
 	<stdlib.h>
 	<cjson/cJSON.h>
 	"../Headers/helper.h"
 	"../header_files.h"
 
-1730285028 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
+1730285708 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
@@ -52,7 +53,7 @@
 	<cjson/cJSON.h>
 	"../header_files.h"
 
-1730276309 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/snmp_task.c
+1730285565 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/snmp_task.c
 	<net-snmp/net-snmp-config.h>
 	<net-snmp/net-snmp-includes.h>
 	<stdio.h>

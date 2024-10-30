@@ -82,22 +82,23 @@ void set_value_with_json(const char *key, char *oid, cJSON *json_data)
     cJSON_AddItemReferenceToObject(json_obj, key, json_item);
     char *json_str = malloc(1024);
     json_str = cJSON_PrintUnformatted(json_obj);
-    /*redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s", json_str);
+    redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s", json_str);
     if (reply == NULL)
     {
         printf("Error: %s\n", redis->errstr);
         redisFree(redis);
         exit(1);
-    }*/
+    }
 
     // printf("Test : RPUSH command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
-    // freeReplyObject(reply);
+    freeReplyObject(reply);
     printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
 }
 
 void proces_oid_data(char *oid, char *hash_key, int operation_type)
 {
-    printf("%s---%s--type : %d\n", oid, hash_key, operation_type);
+    //printf("%s---%s--type : %d\n", oid, hash_key, operation_type);
+
     if (operation_type == SNMP_GET_OP)
     {
         snmp_get_with_hash_key(oid, hash_key);
@@ -146,7 +147,7 @@ void parse_oid_data_from_json(cJSON *json)
         {
             proces_oid_data(snmpwalk_value->valuestring, redis_map_key->valuestring, SNMP_WALK_OP);
             // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
-            break;
+            //break;
         }
     }
 }

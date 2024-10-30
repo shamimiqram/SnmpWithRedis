@@ -54,11 +54,10 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
             snprint_variable(buffer, buffer_length, vars->name, vars->name_length, vars);
             printf("%s\n", buffer);
 
-            char *ret = malloc(1024);
             char *oid = malloc(1024);
             oid = parse_oid_info(vars->name, vars->name_length);
             // printf("%s\n", oid);
-            ret = format_oid_result_json(buffer, hash_key, oid);
+            format_oid_result_json(buffer, hash_key, oid);
         }
     }
 

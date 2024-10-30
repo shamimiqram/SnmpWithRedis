@@ -13,13 +13,13 @@ void device_monitor()
     bool is_trim_enable = true;
     while(command != -1)
     {
-        printf("Device Monitor\n Enter 1 for run operation\n Enter 0 for exit\n");
+        printf("Device Monitor\n===> Enter 1 for run operation\n===> Enter 0 for exit\n");
         scanf("%d", &command);
         if(command == 0)
         {
             break;
         }
-        else
+        else if(command == 1)
         {
             get_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
 
@@ -31,6 +31,10 @@ void device_monitor()
             {
                 start_pos = start_pos + list_cnt;
             }
+        }
+        else
+        {
+                printf("Wrong input\n");
         }
     }
 }
