@@ -44,7 +44,7 @@ void wait_for_response()
             snmp_timeout();
     }
 
-    printf("--No Pending Request--\n\n");
+    printf("\n--No Pending Request--\n");
 }
 
 void print_oid(oid *oid, size_t oid_len)

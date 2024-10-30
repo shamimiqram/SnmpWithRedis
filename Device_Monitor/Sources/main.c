@@ -13,7 +13,7 @@ void device_monitor()
     bool is_trim_enable = false;
     while(command != -1)
     {
-        printf("Device Monitor\n===> Enter 1 for run operation\n===> Enter 0 for exit\n");
+        printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
         scanf("%d", &command);
         if(command == 0)
         {

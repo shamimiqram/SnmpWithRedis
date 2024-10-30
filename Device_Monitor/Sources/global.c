@@ -56,5 +56,5 @@ void update_config_data()
             token = strtok(NULL, delemeter);
         }
     }
-    printf("Configuration updated!\n Ready for device monitoring!\n");
+    printf("Configuration updated!\nReady for device monitoring!\n\n");
 }
