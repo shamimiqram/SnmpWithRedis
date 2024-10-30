@@ -15,10 +15,11 @@ void update_config_data()
     char lines[MAX_LINES][MAX_LENGTH];
 
     int line_cnt = read_config_file(filename, lines);
+    active_snmp_req = 0;
 
     for (int i = 0; i < line_cnt; i++)
     {
-        const char *delemeter = " :";
+        const char *delemeter = " ";
         char *token = strtok(lines[i], delemeter);
         char *ip_info = "REDIS_IP";
         char *port_info = "REDIS_PORT";
@@ -55,4 +56,5 @@ void update_config_data()
             token = strtok(NULL, delemeter);
         }
     }
+    printf("Configuration updated!\n Ready for device monitoring!\n");
 }

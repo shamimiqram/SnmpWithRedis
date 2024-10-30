@@ -71,7 +71,7 @@ void set_null_value_in_redis(const char *key, char *oid)
 
     // printf("Test : RPUSH command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
     // freeReplyObject(reply);
-    printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
+    // printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
 }
 
 void set_value_with_json(const char *key, char *oid, cJSON *json_data)
@@ -92,12 +92,12 @@ void set_value_with_json(const char *key, char *oid, cJSON *json_data)
 
     // printf("Test : RPUSH command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
     freeReplyObject(reply);
-    printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
+    //printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
 }
 
 void proces_oid_data(char *oid, char *hash_key, int operation_type)
 {
-    //printf("%s---%s--type : %d\n", oid, hash_key, operation_type);
+    // printf("%s---%s--type : %d\n", oid, hash_key, operation_type);
 
     if (operation_type == SNMP_GET_OP)
     {
@@ -120,7 +120,7 @@ void parse_oid_data_from_json(cJSON *json)
     cJSON *snmp_community_str = cJSON_GetObjectItem(json, "snmp_community_str");
     cJSON *oid_info = cJSON_GetObjectItem(json, "oid_info");
 
-    // printf("IP : %s\n", device_ip->valuestring);
+    //printf("IP : %s\n", device_ip->valuestring);
 
     cJSON *item;
 
@@ -132,7 +132,7 @@ void parse_oid_data_from_json(cJSON *json)
         cJSON *redis_map_key = cJSON_GetObjectItem(item, "redis_map_key");
 
         // Print the redis_map_key
-        printf("Redis Map Key: %s\n", redis_map_key->valuestring);
+        // printf("Redis Map Key: %s\n", redis_map_key->valuestring);
 
         cJSON *snmpget_value;
         cJSON_ArrayForEach(snmpget_value, snmpget)
@@ -147,19 +147,19 @@ void parse_oid_data_from_json(cJSON *json)
         {
             proces_oid_data(snmpwalk_value->valuestring, redis_map_key->valuestring, SNMP_WALK_OP);
             // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
-            //break;
+            // break;
         }
     }
 }
 
-char *get_oid_from_redis(char *key, int start_idx, int last_idx)
+void get_and_process_oid_from_redis(char *key, int start_idx, int last_idx)
 {
     redisReply *getReply = (redisReply *)redisCommand(redis, "LRANGE %s %d %d", key, start_idx, last_idx);
     if (getReply == NULL)
     {
         printf("Error getting key: %s\n", redis->errstr);
         free_redis();
-        return NULL;
+        return;
     }
 
     if (getReply->type == REDIS_REPLY_STRING)
@@ -175,18 +175,15 @@ char *get_oid_from_redis(char *key, int start_idx, int last_idx)
                 cJSON *json = cJSON_Parse(getReply->element[i]->str);
                 parse_oid_data_from_json(json);
             }
-            // break;
         }
     }
     else
     {
         printf("Key not found or not a string %d\n", getReply->type);
-        return key;
+        return;
     }
 
     freeReplyObject(getReply);
-    char *oid_str = "Free";
-    return oid_str;
 }
 
 void trim_data_from_redis(char *redis_key, int list_cnt)

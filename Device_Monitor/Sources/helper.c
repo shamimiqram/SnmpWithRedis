@@ -44,7 +44,7 @@ void wait_for_response()
             snmp_timeout();
     }
 
-    printf("--No Pending Request--\n--Exit--\n");
+    printf("--No Pending Request--\n\n");
 }
 
 void print_oid(oid *oid, size_t oid_len)
@@ -148,7 +148,7 @@ void format_oid_result_json(char *result, char *key, char *oid)
 
     cJSON ret;
     ret = oid_info_to_json(ret_oid, type, value);
-    printf(" Oid : %s\n", oid);
+    //printf(" Oid : %s\n", oid);
     set_value_with_json(key, oid, &ret);
 }
 
