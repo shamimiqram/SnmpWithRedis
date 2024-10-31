@@ -10,7 +10,7 @@ void device_monitor()
 {
     int command = 0;
     int start_pos = 0, list_cnt = 10;
-    bool is_trim_enable = true;
+    bool is_trim_enable = false;
     while(command != -1)
     {
         printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
@@ -22,6 +22,7 @@ void device_monitor()
         else if(command == 1)
         {
             get_and_process_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
+            printf("Done\n");
             wait_for_response();
 
             if(is_trim_enable)

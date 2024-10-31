@@ -51,10 +51,10 @@ void connect_redis()
     freeReplyObject(reply);
 }
 
-void set_null_value_in_redis(const char *key, char *oid)
+void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
 {
     cJSON json_data;
-    json_data = oid_info_to_json(oid, "", "");
+    json_data = oid_info_to_json(oid, "", "", error_msg);
     cJSON *json_obj = cJSON_CreateObject();
     cJSON *json_item = cJSON_CreateObject();
     cJSON_AddItemReferenceToObject(json_item, oid, &json_data);

@@ -147,7 +147,7 @@ void format_oid_result_json(char *result, char *key, char *oid)
     }
 
     cJSON ret;
-    ret = oid_info_to_json(ret_oid, type, value);
+    ret = oid_info_to_json(ret_oid, type, value, "");
     //printf(" Oid : %s\n", oid);
     set_value_with_json(key, oid, &ret);
 }

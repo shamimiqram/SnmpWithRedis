@@ -64,7 +64,11 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
     else
     {
         // Handle error
-        fprintf(stderr, "Error receiving SNMP response\n");
+        char *oid = malloc(1024);
+        oid = parse_oid_info(response->variables->name, response->variables->name_length);
+        //fprintf(stderr, "Error receiving SNMP response : %s \n", oid);
+        set_error_value_in_redis(hash_key, oid, "Error receiving SNMP response");
+        
     }
 
     // snmp_free_pdu(response);
@@ -117,8 +121,8 @@ void snmp_get_with_hash_key(char *str, char *hash_key)
     size_t oid_len = MAX_OID_LEN;
     if (!snmp_parse_oid(str, oid, &oid_len))
     {
-        fprintf(stderr, "Failed to parse OID : %s\n", str);
-        set_null_value_in_redis(hash_key, str);
+        //fprintf(stderr, "Failed to parse OID : %s\n", str);
+        set_error_value_in_redis(hash_key, str, "Failed to parse OID");
         return;
     }
 
@@ -152,6 +156,7 @@ void snmp_walk_with_hash_key(char *str, char *hash_key)
     if (!snmp_parse_oid(str, oid, &oid_len))
     {
         fprintf(stderr, "Failed to parse OID : %s\n", str);
+        set_error_value_in_redis(hash_key, str, "Failed to parse OID");
         return;
     }
 

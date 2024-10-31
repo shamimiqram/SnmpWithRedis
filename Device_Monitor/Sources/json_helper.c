@@ -10,19 +10,19 @@
 #define PORT_INFO_KEY "snmp_port"
 #define OID_INFO_KEY "oid"
 #define OP_INFO_KEY "operation_type"
+#define REPLY_TYPE_KEY "type"
+#define REPLY_VALUE_KEY "value"
+#define ERROR_MSG_KEY "error"
 
-cJSON oid_info_to_json(char *oid, char *type, char *value)
+cJSON oid_info_to_json(char *oid, char *type, char *value, char *error_msg)
 {
     cJSON *json_object = cJSON_CreateObject();
 
-    cJSON_AddStringToObject(json_object, "oid", oid);
-    cJSON_AddStringToObject(json_object, "type", type);
-    cJSON_AddStringToObject(json_object, "value", value);
+    cJSON_AddStringToObject(json_object, OID_INFO_KEY, oid);
+    cJSON_AddStringToObject(json_object, REPLY_TYPE_KEY, type);
+    cJSON_AddStringToObject(json_object, REPLY_VALUE_KEY, value);
+    cJSON_AddStringToObject(json_object, ERROR_MSG_KEY, error_msg);
 
-    // printf("%s\n",cJSON_Print(json_object) );
-    // char * json_string = malloc(1024);
-    // json_string = cJSON_Print(json_object);
-    // printf("%s\n", json_string);
     return *json_object;
 }
 

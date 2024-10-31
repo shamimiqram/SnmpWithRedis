@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1730290537 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/helper.c
+1730349976 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/helper.c
 	<stdio.h>
 	<stdlib.h>
 	<sys/time.h>
@@ -16,7 +16,7 @@
 	"Headers/snmp_task.h"
 	"Headers/global.h"
 
-1730277063 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/json_helper.h
+1730349807 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/json_helper.h
 	<cjson/cJSON.h>
 
 1730285559 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/helper.h
@@ -24,20 +24,20 @@
 	<net-snmp/net-snmp-includes.h>
 	<cjson/cJSON.h>
 
-1730286187 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/redis_task.h
+1730349668 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/redis_task.h
 	<cjson/cJSON.h>
 
 1730269295 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/snmp_task.h
 
 1730280605 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/global.h
 
-1730276316 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/json_helper.c
+1730350713 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/json_helper.c
 	<cjson/cJSON.h>
 	<stdio.h>
 	<stdlib.h>
 	"../header_files.h"
 
-1730290523 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
+1730350003 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
 	<stdio.h>
 	<stdbool.h>
 	<stdlib.h>
@@ -45,7 +45,7 @@
 	"../Headers/helper.h"
 	"../header_files.h"
 
-1730289113 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
+1730349855 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
@@ -53,7 +53,7 @@
 	<cjson/cJSON.h>
 	"../header_files.h"
 
-1730287379 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/snmp_task.c
+1730350445 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/snmp_task.c
 	<net-snmp/net-snmp-config.h>
 	<net-snmp/net-snmp-includes.h>
 	<stdio.h>
