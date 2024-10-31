@@ -61,16 +61,16 @@ void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
     cJSON_AddItemReferenceToObject(json_obj, key, json_item);
     char *json_str = malloc(1024);
     json_str = cJSON_PrintUnformatted(json_obj);
-    /*redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s", json_str);
+    redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH EYE:SNMP_RESULT %s", json_str);
     if (reply == NULL)
     {
         printf("Error: %s\n", redis->errstr);
         redisFree(redis);
         exit(1);
-    }*/
+    }
 
     // printf("Test : RPUSH command result: %lld\n", reply->integer); // Returns 1 if a new field is created, 0 if it was updated
-    // freeReplyObject(reply);
+    freeReplyObject(reply);
     // printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
 }
 

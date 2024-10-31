@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1730356354 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/helper.c
+1730367432 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/helper.c
 	<stdio.h>
 	<stdlib.h>
 	<sys/time.h>
@@ -29,7 +29,7 @@
 
 1730269295 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/snmp_task.h
 
-1730280605 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/global.h
+1730367421 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/global.h
 
 1730350713 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/json_helper.c
 	<cjson/cJSON.h>
@@ -37,12 +37,11 @@
 	<stdlib.h>
 	"../header_files.h"
 
-1730357578 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
+1730367169 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
 	<stdio.h>
 	<stdbool.h>
 	<stdlib.h>
 	<pthread.h>
-	<libconfig.h>
 	<cjson/cJSON.h>
 	"../Headers/helper.h"
 	"../header_files.h"

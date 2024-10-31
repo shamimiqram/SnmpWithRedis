@@ -2,7 +2,6 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <libconfig.h>
 #include <cjson/cJSON.h>
 
 #include "../Headers/helper.h"
@@ -48,10 +47,6 @@ void device_monitor()
 
 int main()
 {
-    config_t cfg;
-
-    config_init(&cfg);
-
     update_config_data();
     connect_redis();
     device_monitor();

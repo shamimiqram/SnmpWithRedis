@@ -6,7 +6,7 @@ extern char *redis_key;
 extern char *redis_ip;
 extern int redis_port;
 extern char *redis_pass;
-
+void update_config_file_database();
 void update_config_data();
 
 #endif
