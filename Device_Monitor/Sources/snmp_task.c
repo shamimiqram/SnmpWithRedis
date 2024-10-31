@@ -139,7 +139,8 @@ void snmp_get_with_hash_key(char *str, char *hash_key)
     if (status == 0)
     {
         snmp_perror("snmp_send");
-        exit(1);
+        set_error_value_in_redis(hash_key, str, "Failed to send GET request");
+        //exit(1);
     }
 }
 
@@ -173,6 +174,6 @@ void snmp_walk_with_hash_key(char *str, char *hash_key)
     if (status == 0)
     {
         snmp_perror("snmp_send");
-        exit(1);
+        set_error_value_in_redis(hash_key, str, "Failed to send WALK request");
     }
 }
