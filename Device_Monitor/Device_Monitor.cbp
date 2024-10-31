@@ -18,6 +18,7 @@
 					<Add library="snmp" />
 					<Add library="hiredis" />
 					<Add library="cjson" />
+					<Add library="config" />
 					<LinkerExe value="CCompiler" />
 				</Linker>
 			</Target>
@@ -42,6 +43,7 @@
 		<Unit filename="Headers/json_helper.h" />
 		<Unit filename="Headers/redis_task.h" />
 		<Unit filename="Headers/snmp_task.h" />
+		<Unit filename="Others/config.cfg" />
 		<Unit filename="Others/config.txt" />
 		<Unit filename="Sources/global.c">
 			<Option compilerVar="CC" />

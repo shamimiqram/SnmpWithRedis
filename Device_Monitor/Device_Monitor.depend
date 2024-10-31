@@ -37,10 +37,12 @@
 	<stdlib.h>
 	"../header_files.h"
 
-1730350003 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
+1730357578 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
 	<stdio.h>
 	<stdbool.h>
 	<stdlib.h>
+	<pthread.h>
+	<libconfig.h>
 	<cjson/cJSON.h>
 	"../Headers/helper.h"
 	"../header_files.h"
