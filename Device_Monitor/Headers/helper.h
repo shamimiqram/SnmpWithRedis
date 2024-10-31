@@ -9,7 +9,7 @@
 #define HELPER_TASK_H
 
 void printCurrentTime();
-void wait_for_response();
+void* wait_for_response(void *arg);
 int read_config_file(char *filename, char lines[MAX_LINES][MAX_LENGTH]);
 void print_oid(oid *oid, size_t oid_len);
 void print_variable_list(netsnmp_variable_list *vars);

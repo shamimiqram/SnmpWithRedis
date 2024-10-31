@@ -41,8 +41,8 @@ char *parse_oid_info(oid *oid, size_t oid_len)
 int async_callback_with_hash_key(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response, void *magic)
 {
     char *hash_key = (char *)magic;
-    //printf("GET Response : key : %s", hash_key);
-    //printCurrentTime();
+    active_snmp_req--;
+    printf("Active Req : %d\n", active_snmp_req);
 
     if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
     {
@@ -71,9 +71,8 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
         
     }
 
-    // snmp_free_pdu(response);
-    // free(magic);
-    active_snmp_req--;
+    //snmp_free_pdu(response);
+    free(magic);
     return 1;
 }
 
@@ -139,6 +138,7 @@ void snmp_get_with_hash_key(char *str, char *hash_key)
     if (status == 0)
     {
         snmp_perror("snmp_send");
+        active_snmp_req--;
         set_error_value_in_redis(hash_key, str, "Failed to send GET request");
         //exit(1);
     }
@@ -174,6 +174,7 @@ void snmp_walk_with_hash_key(char *str, char *hash_key)
     if (status == 0)
     {
         snmp_perror("snmp_send");
+        active_snmp_req--;
         set_error_value_in_redis(hash_key, str, "Failed to send WALK request");
     }
 }

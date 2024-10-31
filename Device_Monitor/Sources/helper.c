@@ -22,9 +22,9 @@ void printCurrentTime()
     printf("%s.%03ld\n", timeString, tv.tv_usec / 1000);
 }
 
-void wait_for_response()
+void *wait_for_response(void *)
 {
-    while (active_snmp_req)
+    while (active_snmp_req > 0)
     {
         int fds = 0, block = 1;
         fd_set fdset;
