@@ -30,11 +30,13 @@ void connect_redis()
         if (redis)
         {
             printf("Error: %s\n", redis->errstr);
+            printCurrentTime();
             redisFree(redis);
         }
         else
         {
             printf("Can't allocate redis context\n");
+            printCurrentTime();
         }
         exit(1);
     }
@@ -50,6 +52,7 @@ void connect_redis()
     printf("\n    =================================\n");
     printf("    || Redis Connection : Success! ||\n");
     printf("    =================================\n");
+    printCurrentTime();
 
     freeReplyObject(reply);
 }
@@ -68,6 +71,7 @@ void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
     if (reply == NULL)
     {
         printf("Error: %s\n", redis->errstr);
+        printCurrentTime();
         redisFree(redis);
         exit(1);
     }
@@ -89,6 +93,7 @@ void set_value_with_json(const char *key, char *oid, cJSON *json_data)
     if (reply == NULL)
     {
         printf("Error: %s\n", redis->errstr);
+        printCurrentTime();
         redisFree(redis);
         exit(1);
     }

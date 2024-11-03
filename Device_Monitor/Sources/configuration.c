@@ -24,12 +24,12 @@ int handler(void* user, const char* section, const char* name, const char* value
                 strcpy(redis_ip, value);
         }
         else if (strcmp(name, "PORT") == 0) redis_port= atoi(value);
-        else if (strcmp(name, "PASS") == 0) 
+        else if (strcmp(name, "PASS") == 0)
         {
             redis_pass = malloc(1024);
             strcpy(redis_pass, value);
         }
-        else if (strcmp(name, "KEY") == 0) 
+        else if (strcmp(name, "KEY") == 0)
         {
             redis_key = malloc(1024);
             strcpy(redis_key, value);
@@ -63,11 +63,11 @@ void configured_redis_info()
     }
 
     // Output the parsed configuration
-    // printf("Redis Configuration:\n");
-    // printf("  IP: %s\n", redis_ip);
-    // printf("  PORT: %d\n", redis_port);
-    // printf("  PASS: %s\n", redis_pass);
-    // printf("  KEY: %s\n", redis_key);
-    // printf("  POP Count: %d\n", redis_list_cnt);
-    // printf("  TRIM: %d\n", redis_trim);
+    printf("Redis Configuration:\n");
+    printf("  IP: %s\n", redis_ip);
+    printf("  PORT: %d\n", redis_port);
+    printf("  PASS: %s\n", redis_pass);
+    printf("  KEY: %s\n", redis_key);
+    printf("  POP Count: %d\n", redis_list_cnt);
+    printf("  TRIM: %d\n", redis_trim);
 }

@@ -8,6 +8,8 @@
 #include "../Headers/helper.h"
 #include "../header_files.h"
 
+FILE *file;
+
 void device_monitor()
 {
     int command = 1;
@@ -18,6 +20,7 @@ void device_monitor()
     while(command != -1)
     {
         printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
+        printCurrentTime();
         //scanf("%d", &command);
         if(command == 0)
         {
@@ -51,12 +54,27 @@ void device_monitor()
         else
         {
                 printf("Wrong input\n");
+                printCurrentTime();
         }
     }
 }
 
+void start_log_file()
+{
+
+    file = freopen("LogFile.txt", "w", stdout);
+    if (file == NULL) {
+        printf("Error opening  log file\n");
+    }
+}
+
+void close_file()
+{
+    fclose(file);
+}
 int main()
 {
+    start_log_file();
     configured_redis_info();
     //update_config_data();
     //update_config_file_database();
@@ -65,5 +83,6 @@ int main()
     //wait_for_response(NULL);
     free_redis();
     printf("---Exit---\n");
+    close_file();
     return 0;
 }
