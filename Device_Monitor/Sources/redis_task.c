@@ -168,6 +168,7 @@ void get_and_process_oid_from_redis(char *key, int start_idx, int last_idx)
     }
     else if (getReply->type == REDIS_REPLY_ARRAY)
     {
+        printf("Get element  number from redis queue : %d\n", getReply->elements);
         for (size_t i = 0; i < getReply->elements; i++)
         {
             if (getReply->element[i]->type == REDIS_REPLY_STRING)

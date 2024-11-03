@@ -6,7 +6,8 @@
 #include "Headers/redis_task.h"
 #include "Headers/snmp_task.h"
 #include "Headers/global.h"
-
+#include "Headers/ini.h"
+#include "Headers/configuration.h"
 
 
 #endif // ALL_H_INCLUDED

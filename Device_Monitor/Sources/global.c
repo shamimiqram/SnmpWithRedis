@@ -7,54 +7,44 @@
 int active_snmp_req = 0;
 char *redis_ip = "103.239.252.139";
 int redis_port = 6379;
-char *redis_pass = "Nopass1234";
-char *redis_key = "EYE:SNMP_PENDING";
+const char *redis_pass = "Nopass1234";
+const char *redis_key = "EYE:SNMP_PENDING";
+int redis_list_cnt = 0;
+int redis_trim = 1; // 1 for trim, 0 for no trim
 
 void process_config(config_t *cfg) {
-    const char *host;
-    int port;
-    const char *user;
-    const char *password;
 
     // Retrieve database settings
-    if (config_lookup_string(cfg, "database.host", &host) &&
-        config_lookup_int(cfg, "database.port", &port) &&
-        config_lookup_string(cfg, "database.user", &user) &&
-        config_lookup_string(cfg, "database.password", &password)) {
-        printf("Database Configuration:\n");
-        printf("  Host: %s\n", host);
-        printf("  Port: %d\n", port);
-        printf("  User: %s\n", user);
-        printf("  Password: %s\n", password);
+    if (config_lookup_string(cfg, "REDIS.IP", &redis_key) &&
+        config_lookup_int(cfg, "REDIS.PORT", &redis_port) &&
+        config_lookup_string(cfg, "REDIS.PASS", &redis_pass) &&
+        config_lookup_string(cfg, "REDIS.KEY", &redis_key) &&
+        config_lookup_int(cfg, "REDIS.POP_COUNT", &redis_list_cnt) &&
+        config_lookup_int(cfg, "REDIS.TRIM", &redis_trim)) {
+        printf("Redis Configuration:\n");
+        printf("  IP: %s\n", redis_ip);
+        printf("  PORT: %d\n", redis_port);
+        printf("  PASS: %s\n", redis_pass);
+        printf("  KEY: %s\n", redis_key);
+        printf("  POP Count: %d\n", redis_list_cnt);
+        printf("  TRIM: %d\n", redis_trim);
     } else {
-        fprintf(stderr, "Error: No 'database' configuration found.\n");
+        fprintf(stderr, "Error: No 'redis' configuration found. \n");
     }
 
-    // Retrieve log settings
-    const char *log_level;
-    const char *log_file;
 
-    if (config_lookup_string(cfg, "log.level", &log_level) &&
-        config_lookup_string(cfg, "log.file", &log_file)) {
-        printf("\nLog Configuration:\n");
-        printf("  Level: %s\n", log_level);
-        printf("  File: %s\n", log_file);
-    } else {
-        fprintf(stderr, "Error: No 'log' configuration found.\n");
-    }
 }
 
 void update_config_file_database()
 {
+    config_t cfg;
+    config_init(&cfg);
+    char *filename = "./Others/config.cfg";
+    config_read_file(&cfg, filename);
 
-    config_t *cfg;
-    config_init(cfg);
-    char *filename = "./Othersconfig.cfg";
-    config_read_file(cfg, filename);
+    process_config(&cfg);
 
-    process_config(cfg);
-
-    config_destroy(cfg);
+    config_destroy(&cfg);
 }
 
 void update_config_data()

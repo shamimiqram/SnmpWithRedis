@@ -47,10 +47,12 @@ void device_monitor()
 
 int main()
 {
-    update_config_data();
+    configured_redis_info();
+    //update_config_data();
+    //update_config_file_database();
     connect_redis();
     device_monitor();
-    //wait_for_response();
+    //wait_for_response(NULL);
     free_redis();
     printf("---Exit---\n");
     return 0;

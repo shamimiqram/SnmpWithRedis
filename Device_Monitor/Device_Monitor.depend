@@ -9,12 +9,14 @@
 	<unistd.h>
 	"../header_files.h"
 
-1730191358 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/header_files.h
+1730376535 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/header_files.h
 	"Headers/json_helper.h"
 	"Headers/helper.h"
 	"Headers/redis_task.h"
 	"Headers/snmp_task.h"
 	"Headers/global.h"
+	"Headers/ini.h"
+	"Headers/configuration.h"
 
 1730349807 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/json_helper.h
 	<cjson/cJSON.h>
@@ -29,7 +31,7 @@
 
 1730269295 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/snmp_task.h
 
-1730367421 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/global.h
+1730608778 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/global.h
 
 1730350713 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/json_helper.c
 	<cjson/cJSON.h>
@@ -37,7 +39,7 @@
 	<stdlib.h>
 	"../header_files.h"
 
-1730367169 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
+1730608929 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
 	<stdio.h>
 	<stdbool.h>
 	<stdlib.h>
@@ -46,7 +48,7 @@
 	"../Headers/helper.h"
 	"../header_files.h"
 
-1730349855 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
+1730367574 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
@@ -54,7 +56,7 @@
 	<cjson/cJSON.h>
 	"../header_files.h"
 
-1730352283 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/snmp_task.c
+1730608973 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/snmp_task.c
 	<net-snmp/net-snmp-config.h>
 	<net-snmp/net-snmp-includes.h>
 	<stdio.h>
@@ -62,6 +64,23 @@
 	"../Headers/helper.h"
 	"../header_files.h"
 
-1730290402 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/global.c
+1730608659 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/global.c
+	<libconfig.h>
+	"../header_files.h"
+
+1730375646 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/ini.h
+	<stdio.h>
+
+1730376520 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/configuration.h
+
+1730376205 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/ini.c
+	<stdio.h>
+	<ctype.h>
+	<string.h>
+	"../header_files.h"
+	<stddef.h>
+	<stdlib.h>
+
+1730608729 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/configuration.c
 	"../header_files.h"
 

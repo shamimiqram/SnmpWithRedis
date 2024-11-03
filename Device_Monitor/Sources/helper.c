@@ -173,3 +173,5 @@ int read_config_file(char *filename, char lines[MAX_LINES][MAX_LENGTH])
     fclose(file);
     return line_count; // Return the number of lines read
 }
+
+

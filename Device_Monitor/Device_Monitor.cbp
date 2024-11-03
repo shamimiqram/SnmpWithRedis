@@ -38,17 +38,26 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="Headers/configuration.h" />
 		<Unit filename="Headers/global.h" />
 		<Unit filename="Headers/helper.h" />
+		<Unit filename="Headers/ini.h" />
 		<Unit filename="Headers/json_helper.h" />
 		<Unit filename="Headers/redis_task.h" />
 		<Unit filename="Headers/snmp_task.h" />
 		<Unit filename="Others/config.cfg" />
+		<Unit filename="Others/config.ini" />
 		<Unit filename="Others/config.txt" />
+		<Unit filename="Sources/configuration.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="Sources/global.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/helper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/ini.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/json_helper.c">
