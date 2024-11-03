@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include <pthread.h>
 #include <cjson/cJSON.h>
 
@@ -9,7 +10,7 @@
 
 void device_monitor()
 {
-    int command = 0;
+    int command = 1;
     int start_pos = 0, list_cnt = 10;
     bool is_trim_enable = false;
     pthread_t worker_thread;
@@ -17,7 +18,7 @@ void device_monitor()
     while(command != -1)
     {
         printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
-        scanf("%d", &command);
+        //scanf("%d", &command);
         if(command == 0)
         {
             break;
@@ -25,7 +26,15 @@ void device_monitor()
         else if(command == 1)
         {
             int pop_obj_cnt = get_and_process_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
-            printf("Get element  number from redis queue : %d\n", pop_obj_cnt);
+            //printf("Get element  number from redis queue : %d\n", pop_obj_cnt);
+            if(pop_obj_cnt == 0)
+            {
+                sleep(5);
+            }
+            else
+            {
+                sleep(1);
+            }
 
             pthread_create(&worker_thread, NULL ,wait_for_response, NULL);
             pthread_join(worker_thread, NULL);

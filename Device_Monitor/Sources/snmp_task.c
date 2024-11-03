@@ -42,7 +42,7 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
 {
     char *hash_key = (char *)magic;
     active_snmp_req--;
-    printf("Active Req : %d\n", active_snmp_req);
+    //printf("Active Req : %d\n", active_snmp_req);
 
     if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
     {
@@ -68,11 +68,11 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
         oid = parse_oid_info(response->variables->name, response->variables->name_length);
         //fprintf(stderr, "Error receiving SNMP response : %s \n", oid);
         set_error_value_in_redis(hash_key, oid, "Error receiving SNMP response");
-        
+
     }
 
     //snmp_free_pdu(response);
-    free(magic);
+    //free(magic);
     return 1;
 }
 
