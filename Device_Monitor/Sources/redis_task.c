@@ -18,7 +18,12 @@ void free_redis()
 
 void connect_redis()
 {
-    redis = redisConnect(redis_ip, redis_port);
+    struct timeval timeout;
+    timeout.tv_sec = 10;  // Timeout of 1 second
+    timeout.tv_usec = 0;
+
+    //redis = redisConnect(redis_ip, redis_port);
+    redis = redisConnectWithTimeout(redis_ip, redis_port, timeout);
 
     if (redis == NULL || redis->err)
     {
