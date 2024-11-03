@@ -9,10 +9,25 @@
 #include "../header_files.h"
 
 FILE *file;
+int command = 1;
+
+void* input_thread(void* arg) {
+    char buffer[10];
+
+    while (command) {
+        fgets(buffer, sizeof(buffer), stdin);
+
+        // Check if the input is "1"
+        if (strcmp(buffer, "0\n") == 0) {
+            command = 0; // Set running to 0 to break the loop
+        }
+    }
+
+    return NULL;
+}
 
 void device_monitor()
 {
-    int command = 1;
     int start_pos = 0, list_cnt = 10;
     bool is_trim_enable = false;
     pthread_t worker_thread;
@@ -29,7 +44,8 @@ void device_monitor()
         else if(command == 1)
         {
             int pop_obj_cnt = get_and_process_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
-            //printf("Get element  number from redis queue : %d\n", pop_obj_cnt);
+            printf("Get element  number from redis queue : %d\n", pop_obj_cnt);
+            printCurrentTime();
             if(pop_obj_cnt == 0)
             {
                 sleep(5);
@@ -74,7 +90,16 @@ void close_file()
 }
 int main()
 {
-    start_log_file();
+     start_log_file();
+     pthread_t thread;
+
+    // Create the input thread
+    if (pthread_create(&thread, NULL, input_thread, NULL) != 0) {
+        perror("Failed to create thread");
+        return EXIT_FAILURE;
+    }
+
+    printCurrentTime();
     configured_redis_info();
     //update_config_data();
     //update_config_file_database();
