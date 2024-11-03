@@ -26,17 +26,17 @@ void device_monitor()
         {
             int pop_obj_cnt = get_and_process_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
             printf("Get element  number from redis queue : %d\n", pop_obj_cnt);
-            
+
             pthread_create(&worker_thread, NULL ,wait_for_response, NULL);
             pthread_join(worker_thread, NULL);
 
             if(is_trim_enable)
             {
-                trim_data_from_redis(redis_key, list_cnt);
+                trim_data_from_redis(redis_key, pop_obj_cnt);
             }
             else
             {
-                start_pos = start_pos + list_cnt;
+                start_pos = start_pos + pop_obj_cnt;
             }
         }
         else
