@@ -8,9 +8,6 @@
 
 #define SNMP_GET_OP 1
 #define SNMP_WALK_OP 2
-#define REDIS_IP "103.239.252.139"
-#define REDIS_PORT 6379
-#define PASS "Nopass1234"
 
 redisContext *redis = NULL;
 
@@ -21,7 +18,7 @@ void free_redis()
 
 void connect_redis()
 {
-    redis = redisConnect(REDIS_IP, REDIS_PORT);
+    redis = redisConnect(redis_ip, redis_port);
 
     if (redis == NULL || redis->err)
     {
@@ -37,7 +34,7 @@ void connect_redis()
         exit(1);
     }
 
-    redisReply *reply = redisCommand(redis, "AUTH %s", PASS);
+    redisReply *reply = redisCommand(redis, "AUTH %s", redis_pass);
 
     if (reply == NULL)
     {
@@ -45,8 +42,9 @@ void connect_redis()
         free_redis();
         return;
     }
-
-    printf("Redis Connection : Success!\n");
+    printf("\n    =================================\n");
+    printf("    || Redis Connection : Success! ||\n");
+    printf("    =================================\n");
 
     freeReplyObject(reply);
 }

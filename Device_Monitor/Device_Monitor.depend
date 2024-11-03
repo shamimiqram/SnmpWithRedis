@@ -48,7 +48,7 @@
 	"../Headers/helper.h"
 	"../header_files.h"
 
-1730367574 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
+1730612794 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/redis_task.c
 	<stdio.h>
 	<string.h>
 	<stdlib.h>
@@ -64,7 +64,7 @@
 	"../Headers/helper.h"
 	"../header_files.h"
 
-1730608659 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/global.c
+1730612326 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/global.c
 	<libconfig.h>
 	"../header_files.h"
 
@@ -81,6 +81,6 @@
 	<stddef.h>
 	<stdlib.h>
 
-1730608729 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/configuration.c
+1730612833 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/configuration.c
 	"../header_files.h"
 

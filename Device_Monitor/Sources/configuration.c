@@ -54,7 +54,7 @@ void configured_redis_info()
     config.redis_trim = -1;
     config.log_level = NULL;
     config.log_file = NULL;
-printf("  IP: %s\n", redis_ip);
+    //printf("  IP: %s\n", redis_ip);
     // Parse the config file
     char *filename = "./Others/config.ini";
     if (ini_parse(filename, handler, &config) < 0) {
@@ -63,11 +63,11 @@ printf("  IP: %s\n", redis_ip);
     }
 
     // Output the parsed configuration
-    printf("Redis Configuration:\n");
-    printf("  IP: %s\n", redis_ip);
-    printf("  PORT: %d\n", redis_port);
-    printf("  PASS: %s\n", redis_pass);
-    printf("  KEY: %s\n", redis_key);
-    printf("  POP Count: %d\n", redis_list_cnt);
-    printf("  TRIM: %d\n", redis_trim);
+    // printf("Redis Configuration:\n");
+    // printf("  IP: %s\n", redis_ip);
+    // printf("  PORT: %d\n", redis_port);
+    // printf("  PASS: %s\n", redis_pass);
+    // printf("  KEY: %s\n", redis_key);
+    // printf("  POP Count: %d\n", redis_list_cnt);
+    // printf("  TRIM: %d\n", redis_trim);
 }
