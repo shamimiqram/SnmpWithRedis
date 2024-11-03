@@ -26,7 +26,7 @@
 	<net-snmp/net-snmp-includes.h>
 	<cjson/cJSON.h>
 
-1730349668 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/redis_task.h
+1730613647 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/redis_task.h
 	<cjson/cJSON.h>
 
 1730269295 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/snmp_task.h
@@ -39,7 +39,7 @@
 	<stdlib.h>
 	"../header_files.h"
 
-1730608929 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
+1730613712 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
 	<stdio.h>
 	<stdbool.h>
 	<stdlib.h>

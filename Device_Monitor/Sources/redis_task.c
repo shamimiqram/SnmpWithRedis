@@ -150,14 +150,15 @@ void parse_oid_data_from_json(cJSON *json)
     }
 }
 
-void get_and_process_oid_from_redis(char *key, int start_idx, int last_idx)
+int get_and_process_oid_from_redis(char *key, int start_idx, int last_idx)
 {
+    int retrive_obj_cnt = 0;
     redisReply *getReply = (redisReply *)redisCommand(redis, "LRANGE %s %d %d", key, start_idx, last_idx);
     if (getReply == NULL)
     {
         printf("Error getting key: %s\n", redis->errstr);
         free_redis();
-        return;
+        return retrive_obj_cnt;
     }
 
     if (getReply->type == REDIS_REPLY_STRING)
@@ -166,7 +167,7 @@ void get_and_process_oid_from_redis(char *key, int start_idx, int last_idx)
     }
     else if (getReply->type == REDIS_REPLY_ARRAY)
     {
-        printf("Get element  number from redis queue : %d\n", getReply->elements);
+        retrive_obj_cnt = getReply->elements;
         for (size_t i = 0; i < getReply->elements; i++)
         {
             if (getReply->element[i]->type == REDIS_REPLY_STRING)
@@ -179,10 +180,11 @@ void get_and_process_oid_from_redis(char *key, int start_idx, int last_idx)
     else
     {
         printf("Key not found or not a string %d\n", getReply->type);
-        return;
+        return retrive_obj_cnt;
     }
 
     freeReplyObject(getReply);
+    return retrive_obj_cnt;
 }
 
 void trim_data_from_redis(char *redis_key, int list_cnt)

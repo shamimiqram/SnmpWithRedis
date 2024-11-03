@@ -24,8 +24,9 @@ void device_monitor()
         }
         else if(command == 1)
         {
-            get_and_process_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
-            printf("Done\n");
+            int pop_obj_cnt = get_and_process_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
+            printf("Get element  number from redis queue : %d\n", pop_obj_cnt);
+            
             pthread_create(&worker_thread, NULL ,wait_for_response, NULL);
             pthread_join(worker_thread, NULL);
 
