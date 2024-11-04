@@ -2,13 +2,14 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <signal.h>
 #include <pthread.h>
 #include <cjson/cJSON.h>
 
 #include "../Headers/helper.h"
 #include "../header_files.h"
 
-FILE *file;
+FILE *file, *debug_file;
 int command = 1;
 
 void* input_thread(void* arg) {
@@ -87,18 +88,31 @@ void start_log_file()
 void close_file()
 {
     fclose(file);
+    fclose(debug_file);
 }
+
+void signal_handler(int signum) {
+    if (signum == SIGSEGV) {
+        printf("Caught segmentation fault (SIGSEGV)! Log files saving ...\n");
+        close_file();
+        // Perform any cleanup here
+        exit(EXIT_FAILURE); // Exit the program with failure status
+    }
+}
+
 int main()
 {
-     start_log_file();
-     pthread_t thread;
+    signal(SIGSEGV, signal_handler);
+    start_log_file();
+    pthread_t thread;
 
     // Create the input thread
     if (pthread_create(&thread, NULL, input_thread, NULL) != 0) {
         perror("Failed to create thread");
         return EXIT_FAILURE;
     }
-    FILE *debug_file = fopen("DebugFile.txt", "w");
+
+    debug_file = fopen("DebugFile.txt", "w");
     log_add_fp(debug_file,LOG_LEVEL_DEBUG);
     log_debug("Sample Log Info");
 
