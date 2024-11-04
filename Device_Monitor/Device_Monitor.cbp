@@ -43,6 +43,7 @@
 		<Unit filename="Headers/helper.h" />
 		<Unit filename="Headers/ini.h" />
 		<Unit filename="Headers/json_helper.h" />
+		<Unit filename="Headers/log.h" />
 		<Unit filename="Headers/redis_task.h" />
 		<Unit filename="Headers/snmp_task.h" />
 		<Unit filename="Others/config.cfg" />
@@ -61,6 +62,9 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/json_helper.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="Sources/log.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="Sources/main.c">
