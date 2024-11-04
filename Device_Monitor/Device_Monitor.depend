@@ -32,7 +32,7 @@
 
 1730269295 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/snmp_task.h
 
-1730608778 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/global.h
+1730695212 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/global.h
 
 1730350713 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/json_helper.c
 	<cjson/cJSON.h>
@@ -40,11 +40,12 @@
 	<stdlib.h>
 	"../header_files.h"
 
-1730691265 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
+1730694657 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/main.c
 	<stdio.h>
 	<stdbool.h>
 	<stdlib.h>
 	<unistd.h>
+	<signal.h>
 	<pthread.h>
 	<cjson/cJSON.h>
 	"../Headers/helper.h"

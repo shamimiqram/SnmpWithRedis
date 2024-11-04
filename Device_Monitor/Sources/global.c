@@ -12,6 +12,13 @@ const char *redis_key = "EYE:SNMP_PENDING";
 int redis_list_cnt = 0;
 int redis_trim = 1; // 1 for trim, 0 for no trim
 
+void safe_free(int **ptr) {
+    if (ptr != NULL && *ptr != NULL) {
+        free(*ptr); // Free the allocated memory
+        *ptr = NULL; // Set the pointer to NULL to avoid double free
+    }
+}
+
 void process_config(config_t *cfg) {
 
     // Retrieve database settings
