@@ -119,13 +119,11 @@ int main()
     printCurrentTime();
     configured_redis_info();
     //update_config_data();
-    //update_config_file_database();
     connect_redis();
     device_monitor();
     //wait_for_response(NULL);
     free_redis();
     printf("---Exit---\n");
     close_file();
-    fclose(debug_file);
     return 0;
 }

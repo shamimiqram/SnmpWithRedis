@@ -19,41 +19,6 @@ void safe_free(int **ptr) {
     }
 }
 
-void process_config(config_t *cfg) {
-
-    // Retrieve database settings
-    if (config_lookup_string(cfg, "REDIS.IP", &redis_key) &&
-        config_lookup_int(cfg, "REDIS.PORT", &redis_port) &&
-        config_lookup_string(cfg, "REDIS.PASS", &redis_pass) &&
-        config_lookup_string(cfg, "REDIS.KEY", &redis_key) &&
-        config_lookup_int(cfg, "REDIS.POP_COUNT", &redis_list_cnt) &&
-        config_lookup_int(cfg, "REDIS.TRIM", &redis_trim)) {
-        printf("Redis Configuration:\n");
-        printf("  IP: %s\n", redis_ip);
-        printf("  PORT: %d\n", redis_port);
-        printf("  PASS: %s\n", redis_pass);
-        printf("  KEY: %s\n", redis_key);
-        printf("  POP Count: %d\n", redis_list_cnt);
-        printf("  TRIM: %d\n", redis_trim);
-    } else {
-        fprintf(stderr, "Error: No 'redis' configuration found. \n");
-    }
-
-
-}
-
-void update_config_file_database()
-{
-    config_t cfg;
-    config_init(&cfg);
-    char *filename = "./Others/config.cfg";
-    config_read_file(&cfg, filename);
-
-    process_config(&cfg);
-
-    config_destroy(&cfg);
-}
-
 void update_config_data()
 {
     char *filename = "./Others/config.txt";

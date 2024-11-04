@@ -8,7 +8,6 @@ extern int redis_port;
 extern const char *redis_pass;
 extern int redis_list_cnt;
 extern int redis_trim;
-void update_config_file_database();
 void update_config_data();
 void safe_free(int **ptr);
 
