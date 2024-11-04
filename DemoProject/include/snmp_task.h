@@ -1,11 +1,8 @@
-#include <net-snmp/net-snmp-config.h>
-#include <net-snmp/net-snmp-includes.h>
-
 #ifndef SNMP_TASK_H
 #define SNMP_TASK_H
 
-void init_snmp_task();
-void snmp_get_req(char str[], netsnmp_session session);
-int async_callback(int operation, struct snmp_session *session, int reqid,netsnmp_pdu *response, void *magic);
+void init_snmp_server(char *ip, char *ver, char *comm_str);
+void snmp_get_with_hash_key(char *str, char *hash_key);
+void snmp_walk_with_hash_key(char *str, char *hash_key);
 
 #endif

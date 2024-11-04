@@ -5,8 +5,8 @@ TARGET = myprogram
 
 all: $(TARGET)
 
-$(TARGET): src/main.o src/redis_task.o src/snmp_task.o src/json_helper.o src/helper.o src/global.o
-	$(CC) -o $(TARGET) main.o redis_task.o snmp_task.o  json_helper.o helper.o global.o $(LDFLAGS)
+$(TARGET): src/main.o src/redis_task.o src/snmp_task.o src/json_helper.o src/helper.o src/global.o src/ini.o src/log.o src/configuration.o
+	$(CC) -o $(TARGET) main.o redis_task.o snmp_task.o  json_helper.o helper.o global.o ini.o log.o configuration.o $(LDFLAGS)
 
 src/main.o: src/main.c
 	$(CC) -c src/main.c $(CFLAGS)
@@ -25,6 +25,15 @@ src/helper.o: src/helper.c include/helper.h
 
 src/global.o: src/global.c include/global.h
 	$(CC) -c src/global.c $(CFLAGS)
+
+src/ini.o: src/ini.c include/ini.h
+	$(CC) -c src/ini.c $(CFLAGS)
+
+src/log.o: src/log.c include/log.h
+	$(CC) -c src/log.c $(CFLAGS)
+
+src/configuration.o: src/configuration.c include/configuration.h
+	$(CC) -c src/configuration.c $(CFLAGS)
 
 gdb: $(TARGET)
 	gdb ./$(TARGET)
