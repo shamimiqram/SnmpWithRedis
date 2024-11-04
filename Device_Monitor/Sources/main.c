@@ -98,6 +98,9 @@ int main()
         perror("Failed to create thread");
         return EXIT_FAILURE;
     }
+    FILE *debug_file = fopen("DebugFile.txt", "w");
+    log_add_fp(debug_file,LOG_LEVEL_DEBUG);
+    log_debug("Sample Log Info");
 
     printCurrentTime();
     configured_redis_info();
@@ -109,5 +112,6 @@ int main()
     free_redis();
     printf("---Exit---\n");
     close_file();
+    fclose(debug_file);
     return 0;
 }

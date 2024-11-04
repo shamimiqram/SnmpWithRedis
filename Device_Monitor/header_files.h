@@ -8,6 +8,7 @@
 #include "Headers/global.h"
 #include "Headers/ini.h"
 #include "Headers/configuration.h"
+#include "Headers/log.h"
 
 
 #endif // ALL_H_INCLUDED

@@ -9,7 +9,7 @@
 	<unistd.h>
 	"../header_files.h"
 
-1730376535 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/header_files.h
+1730690177 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/header_files.h
 	"Headers/json_helper.h"
 	"Headers/helper.h"
 	"Headers/redis_task.h"
@@ -17,6 +17,7 @@
 	"Headers/global.h"
 	"Headers/ini.h"
 	"Headers/configuration.h"
+	"Headers/log.h"
 
 1730349807 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/json_helper.h
 	<cjson/cJSON.h>
@@ -83,5 +84,14 @@
 	<stdlib.h>
 
 1730636233 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/configuration.c
+	"../header_files.h"
+
+1730690559 /home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Headers/log.h
+	<stdio.h>
+	<stdarg.h>
+	<stdbool.h>
+	<time.h>
+
+1730690388 source:/home/dotlines-ubantu/Documents/SnmpWithRedis/Device_Monitor/Sources/log.c
 	"../header_files.h"
 
