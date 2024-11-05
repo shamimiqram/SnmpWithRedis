@@ -1,42 +1,47 @@
-CC=gcc
-CFLAGS=-Iinclude -I/usr/include/net-snmp
-LDFLAGS=-lhiredis -lnetsnmp -lcjson
+# Compiler and flags
+CC = gcc
+CFLAGS = -Iinclude -I/usr/include/net-snmp -I/usr/local/include  # Add include path for custom libraries
+
+# Library paths and flags
+LIBPATH = -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu
+LDFLAGS = /usr/local/lib/libhiredis.a  /usr/local/lib/libnetsnmp.a $(LIBPATH) -lcjson -lssl -lcrypto -lz -lzstd # Link with static libraries
+LDFLAGS += -static
+# Output binary
 TARGET = myprogram
 
+# Source and object files
+SRC_DIR = src
+OBJ_DIR = obj
+
+SOURCES = $(SRC_DIR)/main.c \
+          $(SRC_DIR)/redis_task.c \
+          $(SRC_DIR)/snmp_task.c \
+          $(SRC_DIR)/json_helper.c \
+          $(SRC_DIR)/helper.c \
+          $(SRC_DIR)/global.c \
+          $(SRC_DIR)/ini.c \
+          $(SRC_DIR)/log.c \
+          $(SRC_DIR)/configuration.c
+
+OBJECTS = $(SOURCES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)  # Map .c files to .o object files in the obj dir
+
+# Default target
 all: $(TARGET)
 
-$(TARGET): src/main.o src/redis_task.o src/snmp_task.o src/json_helper.o src/helper.o src/global.o src/ini.o src/log.o src/configuration.o
-	$(CC) -o $(TARGET) main.o redis_task.o snmp_task.o  json_helper.o helper.o global.o ini.o log.o configuration.o $(LDFLAGS)
+# Link object files into the final executable
+$(TARGET): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $(TARGET) $(LDFLAGS)
 
-src/main.o: src/main.c
-	$(CC) -c src/main.c $(CFLAGS)
+# Compile .c files into .o files (with proper include paths)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)  # Create the obj directory if it doesn't exist
+	$(CC) -c $< $(CFLAGS) -o $@
 
-src/redis_task.o: src/redis_task.c include/redis_task.h
-	$(CC) -c src/redis_task.c $(CFLAGS)
-
-src/snmp_task.o: src/snmp_task.c include/snmp_task.h
-	$(CC) -c src/snmp_task.c $(CFLAGS)
-
-src/json_helper.o: src/json_helper.c include/json_helper.h
-	$(CC) -c src/json_helper.c $(CFLAGS)
-
-src/helper.o: src/helper.c include/helper.h
-	$(CC) -c src/helper.c $(CFLAGS)
-
-src/global.o: src/global.c include/global.h
-	$(CC) -c src/global.c $(CFLAGS)
-
-src/ini.o: src/ini.c include/ini.h
-	$(CC) -c src/ini.c $(CFLAGS)
-
-src/log.o: src/log.c include/log.h
-	$(CC) -c src/log.c $(CFLAGS)
-
-src/configuration.o: src/configuration.c include/configuration.h
-	$(CC) -c src/configuration.c $(CFLAGS)
-
+# Debugging target (optional)
 gdb: $(TARGET)
 	gdb ./$(TARGET)
 
+# Clean up object files and the final binary
 clean:
-	rm -f src/*.o $(TARGET)
+	rm -rf $(OBJ_DIR) $(TARGET)
+

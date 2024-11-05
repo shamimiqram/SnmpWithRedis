@@ -20,7 +20,7 @@ void safe_free(int **ptr) {
 
 void update_config_data()
 {
-    char *filename = "./Others/config.txt";
+    char *filename = "config.txt";
     char lines[MAX_LINES][MAX_LENGTH];
 
     int line_cnt = read_config_file(filename, lines);

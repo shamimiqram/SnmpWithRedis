@@ -56,7 +56,7 @@ void configured_redis_info()
     config.log_file = NULL;
     //printf("  IP: %s\n", redis_ip);
     // Parse the config file
-    char *filename = "./Others/config.ini";
+    char *filename = "config.ini";
     if (ini_parse(filename, handler, &config) < 0) {
         fprintf(stderr, "Can't load 'config.ini'\n");
         return ;
