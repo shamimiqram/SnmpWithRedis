@@ -7,7 +7,7 @@ LIBPATH = -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu
 LDFLAGS = /usr/local/lib/libhiredis.a  /usr/local/lib/libnetsnmp.a $(LIBPATH) -lcjson -lssl -lcrypto -lz -lzstd # Link with static libraries
 LDFLAGS += -static
 # Output binary
-TARGET = myprogram
+TARGET = SNMP_MONITOR
 
 # Source and object files
 SRC_DIR = src

@@ -4,7 +4,8 @@ typedef struct {
     char* redis_ip;
     int redis_port;
     char* redis_pass;
-    char* redis_key;
+    char* redis_input_key;
+    char* redis_output_key;
     int redis_pop_count;
     int redis_trim;
     char* log_level;
@@ -29,10 +30,15 @@ int handler(void* user, const char* section, const char* name, const char* value
             redis_pass = malloc(1024);
             strcpy(redis_pass, value);
         }
-        else if (strcmp(name, "KEY") == 0)
+        else if (strcmp(name, "INPUT_QUEUE") == 0)
         {
-            redis_key = malloc(1024);
-            strcpy(redis_key, value);
+            redis_input_key = malloc(1024);
+            strcpy(redis_input_key, value);
+        }
+        else if (strcmp(name, "OUTPUT_QUEUE") == 0)
+        {
+            redis_output_key = malloc(1024);
+            strcpy(redis_output_key, value);
         }
         else if (strcmp(name, "POP_COUNT") == 0) redis_list_cnt= atoi(value);
         else if (strcmp(name, "TRIM") == 0) redis_trim = atoi(value);
@@ -49,7 +55,8 @@ void configured_redis_info()
     config.redis_ip = NULL;
     config.redis_port = -1;
     config.redis_pass = NULL;
-    config.redis_key = NULL;
+    config.redis_input_key = NULL;
+    config.redis_output_key = NULL;
     config.redis_pop_count = -1;
     config.redis_trim = -1;
     config.log_level = NULL;
@@ -67,7 +74,8 @@ void configured_redis_info()
     printf("  IP: %s\n", redis_ip);
     printf("  PORT: %d\n", redis_port);
     printf("  PASS: %s\n", redis_pass);
-    printf("  KEY: %s\n", redis_key);
+    printf("  INPUT QUEUE: %s\n", redis_input_key);
+    printf("  OUTPUT QUEUE: %s\n", redis_output_key);
     printf("  POP Count: %d\n", redis_list_cnt);
     printf("  TRIM: %d\n", redis_trim);
 }

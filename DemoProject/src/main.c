@@ -29,14 +29,21 @@ void* input_thread(void* arg) {
 
 void device_monitor()
 {
+    int total_process_cnt = 0;
     int start_pos = 0, list_cnt = 10;
     bool is_trim_enable = false;
     pthread_t worker_thread;
+    if(redis_trim == 1)
+    {
+        is_trim_enable = true;
+    }
+
+    printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
+    printCurrentTime();
 
     while(command != -1)
     {
-        printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
-        printCurrentTime();
+        
         //scanf("%d", &command);
         if(command == 0)
         {
@@ -44,9 +51,13 @@ void device_monitor()
         }
         else if(command == 1)
         {
-            int pop_obj_cnt = get_and_process_oid_from_redis(redis_key, start_pos, start_pos + list_cnt -1);
+            int pop_obj_cnt = get_and_process_oid_from_redis(redis_input_key, start_pos, start_pos + list_cnt -1);
+            total_process_cnt += pop_obj_cnt;
+
             printf("Get element  number from redis queue : %d\n", pop_obj_cnt);
+            printf("Total element get from redis %d\n", total_process_cnt);
             printCurrentTime();
+            
             if(pop_obj_cnt == 0)
             {
                 sleep(5);
@@ -61,7 +72,7 @@ void device_monitor()
 
             if(is_trim_enable)
             {
-                trim_data_from_redis(redis_key, pop_obj_cnt);
+                trim_data_from_redis(redis_output_key, pop_obj_cnt);
             }
             else
             {
@@ -87,7 +98,7 @@ void start_log_file()
 
 void close_file()
 {
-    fclose(file);
+   // fclose(file);
     fclose(debug_file);
 }
 
@@ -103,7 +114,7 @@ void signal_handler(int signum) {
 int main()
 {
     signal(SIGSEGV, signal_handler);
-    start_log_file();
+    //start_log_file();
     pthread_t thread;
 
     // Create the input thread

@@ -7,7 +7,8 @@ int active_snmp_req = 0;
 char *redis_ip = "103.239.252.139";
 int redis_port = 6379;
 const char *redis_pass = "Nopass1234";
-const char *redis_key = "EYE:SNMP_PENDING";
+const char *redis_input_key = "EYE:SNMP_PENDING";
+const char *redis_output_key = "EYE:SNMP_PENDING";
 int redis_list_cnt = 0;
 int redis_trim = 1; // 1 for trim, 0 for no trim
 
@@ -33,7 +34,9 @@ void update_config_data()
         char *ip_info = "REDIS_IP";
         char *port_info = "REDIS_PORT";
         char *pass_info = "PASS";
-        char *key_info = "KEY";
+        char *input_queue_info = "INPUT_QUEUE";
+        char *output_queue_info = "OUTPUT_QUEUE";
+        char *redis_trim_info = "TRIM";
 
         while (token != NULL)
         {
@@ -52,9 +55,19 @@ void update_config_data()
                 redis_pass = strtok(NULL, delemeter);
                 break;
             }
-            else if (strcmp(token, key_info) == 0)
+            else if (strcmp(token, input_queue_info) == 0)
             {
-                redis_key = strtok(NULL, delemeter);
+                redis_input_key = strtok(NULL, delemeter);
+                break;
+            }
+            else if (strcmp(token, output_queue_info) == 0)
+            {
+                redis_output_key = strtok(NULL, delemeter);
+                break;
+            }
+            else if (strcmp(token, redis_trim_info) == 0)
+            {
+                redis_trim = atoi (strtok(NULL, delemeter));
                 break;
             }
             else

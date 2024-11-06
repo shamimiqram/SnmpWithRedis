@@ -2,7 +2,8 @@
 #define GLOBALS_H
 
 extern int active_snmp_req; // Declaration of the global variable
-extern  const char *redis_key;
+extern  const char *redis_input_key;
+extern  const char *redis_output_key;
 extern  char *redis_ip;
 extern int redis_port;
 extern const char *redis_pass;
