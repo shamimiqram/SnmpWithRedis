@@ -38,7 +38,7 @@ void device_monitor()
         is_trim_enable = true;
     }
 
-    printf("\n-------- Device Monitor --------\n\n===> Enter 1 for run operation\n===> Enter 0 for exit\n\n");
+    printf("\n-------- Device Monitor --------\n\n===> Application running....\n===> Enter 0 for exit\n\n");
     printCurrentTime();
 
     while(command != -1)
@@ -49,7 +49,7 @@ void device_monitor()
         {
             break;
         }
-        else if(command == 1)
+        else
         {
             int pop_obj_cnt = get_and_process_oid_from_redis(redis_input_key, start_pos, start_pos + list_cnt -1);
             total_process_cnt += pop_obj_cnt;
@@ -78,12 +78,7 @@ void device_monitor()
             {
                 start_pos = start_pos + pop_obj_cnt;
             }
-        }
-        else
-        {
-                printf("Wrong input\n");
-                printCurrentTime();
-        }
+        }       
     }
 }
 
