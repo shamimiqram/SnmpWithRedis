@@ -97,7 +97,7 @@ To set up and run **SnmpWithRedis** on your machine, follow these steps:
 
 ```bash
 git clone https://github.com/shamimiqram/SnmpWithRedis.git
-cd SnmpWithRedis
+cd SnmpWithRedis/DemoProject
 ```
 
 ### 2.Install dependencies:
@@ -140,5 +140,5 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 For any questions, issues, or contributions, feel free to reach out or open an issue on GitHub:
 
-- **Your Name**: [shamimeakram@gmail.com](mailto:shamimeakram@gmail.com)
+- **E-Mail**: [shamimeakram@gmail.com](mailto:shamimeakram@gmail.com)
 - **GitHub Repository**: [https://github.com/shamimiqram/SnmpWithRedis](https://github.com/shamimiqram/SnmpWithRedis)
