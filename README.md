@@ -116,11 +116,18 @@ Instructions on running the compiled project.
    - Details of the SNMP OID retrieval process and monitoring from Redis.
    - Instructions for manually stopping the process.
 
-### 5. License:
+## License:
 Information about the licensing of the project.
    - MIT License, with a link to the `LICENSE` file in the project (assuming you will include it).
+## Acknowledgements
 
-### 6. Contact: 
-Contact information for the author of the project.
-   - Name, email, and GitHub link for further inquiries or collaboration.
+- **[net-snmp](http://www.net-snmp.org/)**: Provides the SNMP library used to interact with SNMP-enabled devices.
+- **[Redis](https://redis.io/)**: A powerful in-memory data store, used for managing and storing SNMP data.
+- **[cJSON](https://github.com/DaveGamble/cJSON)**: A lightweight JSON parser and generator for C.
 
+## Contact
+
+For any questions, issues, or contributions, feel free to reach out or open an issue on GitHub:
+
+- **Your Name**: shamimeakram@gmail.com](mailto:shamimeakram@gmail.com)
+- **GitHub Repository**: [https://github.com/shamimiqram/SnmpWithRedis](https://github.com/shamimiqram/SnmpWithRedis)
