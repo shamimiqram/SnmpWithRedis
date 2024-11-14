@@ -100,25 +100,36 @@ git clone https://github.com/shamimiqram/SnmpWithRedis.git
 cd SnmpWithRedis
 ```
 
+### 2.Install dependencies:
+The project requires the following libraries:
 
-### 2. Compile the Project:
-    This section provides the command to compile the project and lists the source files involved.
-   - Code block to compile the project.
-   - Brief description of each source file involved.
+- **libhiredis:** Redis C client library.
+- **net-snmp:** SNMP C library.
+- **cJSON:** C library for JSON parsing and creation.
 
-### 3. Run the Project:
-Instructions on running the compiled project.
-   - Code block to run the project.
-   - Description of the application behavior when run and how to stop it.
+```bash
+sudo apt-get install libhiredis-dev libsnmp-dev libjson-c-dev
+```
+### 3. Compile the Project:
+ ```bash
+ gcc -o snmp_with_redis main.c redis_task.c snmp_task.c json_task.c -lhiredis -lnetsnmp -lcjson 
+ ```
 
-### 4. Usage:
-    Describes how the system will behave when running and how to interact with it.
-   - Details of the SNMP OID retrieval process and monitoring from Redis.
-   - Instructions for manually stopping the process.
+### 4. Run the Project:
+ ```bash
+./snmp_with_redis
+```
+This will start the application and begin monitoring SNMP-enabled devices through Redis.
+
+### 5. Usage:
+After running the project, the application will continuously monitor and process SNMP OIDs from Redis. You can use the following controls:
+
+**Type 0**: To stop the monitoring process and exit the application.
+
+The system retrieves SNMP OIDs stored in Redis, processes them, and stores results (including any errors) back in Redis in JSON format.
 
 ## License:
-Information about the licensing of the project.
-   - MIT License, with a link to the `LICENSE` file in the project (assuming you will include it).
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 ## Acknowledgements
 
 - **[net-snmp](http://www.net-snmp.org/)**: Provides the SNMP library used to interact with SNMP-enabled devices.
@@ -129,5 +140,5 @@ Information about the licensing of the project.
 
 For any questions, issues, or contributions, feel free to reach out or open an issue on GitHub:
 
-- **Your Name**: shamimeakram@gmail.com](mailto:shamimeakram@gmail.com)
+- **Your Name**: [shamimeakram@gmail.com](mailto:shamimeakram@gmail.com)
 - **GitHub Repository**: [https://github.com/shamimiqram/SnmpWithRedis](https://github.com/shamimiqram/SnmpWithRedis)
