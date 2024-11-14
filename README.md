@@ -89,7 +89,38 @@ This modular architecture ensures high performance, easy integration, and the ab
 - **net-snmp**: SNMP C library.
 - **cJSON**: C library for JSON parsing and creation.
 
-To install dependencies, use the following commands (on Ubuntu/Debian-based systems):
+## Installation
+
+To set up and run **SnmpWithRedis** on your machine, follow these steps:
+
+### 1. Clone the repository:
 
 ```bash
-sudo apt-get install libhiredis-dev libsnmp-dev libjson-c-dev
+git clone https://github.com/shamimiqram/SnmpWithRedis.git
+cd SnmpWithRedis
+```
+
+
+### 2. Compile the Project:
+    This section provides the command to compile the project and lists the source files involved.
+   - Code block to compile the project.
+   - Brief description of each source file involved.
+
+### 3. Run the Project:
+Instructions on running the compiled project.
+   - Code block to run the project.
+   - Description of the application behavior when run and how to stop it.
+
+### 4. Usage:
+    Describes how the system will behave when running and how to interact with it.
+   - Details of the SNMP OID retrieval process and monitoring from Redis.
+   - Instructions for manually stopping the process.
+
+### 5. License:
+Information about the licensing of the project.
+   - MIT License, with a link to the `LICENSE` file in the project (assuming you will include it).
+
+### 6. Contact: 
+Contact information for the author of the project.
+   - Name, email, and GitHub link for further inquiries or collaboration.
+
