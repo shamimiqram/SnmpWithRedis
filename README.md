@@ -36,3 +36,29 @@ Key Functions:
 oid_info_to_json(): Creates a JSON object representing SNMP OID data, including type, value, and error message.
 create_JSON_Object(): Creates a JSON object representing SNMP configuration, including IP address, SNMP version, community string, and OID.
 perse_data_from_json(): Parses and extracts a value from a JSON object using a specified key.
+
+2. System Workflow
+SNMP Operation Setup:
+
+The system begins by configuring SNMP devices, including device IP, SNMP version, community string, and OID.
+Configuration data is encapsulated in JSON format using the create_JSON_Object() function and stored in Redis.
+Monitoring and Processing:
+
+The device_monitor() function retrieves SNMP OIDs from Redis and processes them by performing SNMP GET or WALK operations.
+For each SNMP operation, the response is handled asynchronously via snmp_get_with_hash_key() or snmp_walk_with_hash_key().
+Data Handling with Redis:
+
+SNMP results (and errors) are formatted into JSON objects using oid_info_to_json() and pushed into Redis.
+Processed data is trimmed from Redis to maintain efficiency using trim_data_from_redis().
+Error Handling and Logging:
+
+The system handles errors by logging them to files (LogFile.txt, DebugFile.txt).
+In case of a segmentation fault (SIGSEGV), the system performs a clean shutdown via signal_handler() and logs the error details.
+
+3. Conclusion
+The project facilitates the monitoring and management of SNMP-enabled devices, using Redis for data storage and asynchronous SNMP operations. The use of JSON for data exchange provides a flexible and structured approach, allowing easy integration and scalability. Key functionalities include:
+
+SNMP data retrieval and processing.
+Integration with Redis for persistent storage and queueing of SNMP operations.
+Logging and error handling for robust system operation.
+This modular design ensures that the system can handle large volumes of SNMP data efficiently while providing useful insights into device status and performance.
