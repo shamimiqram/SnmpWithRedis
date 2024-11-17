@@ -144,4 +144,4 @@ For any questions, issues, or contributions, feel free to reach out or open an i
 - **GitHub Repository**: [https://github.com/shamimiqram/SnmpWithRedis](https://github.com/shamimiqram/SnmpWithRedis)
 
 ## Flowchart
-![Flowchart diagram](https://github.com/shamimiqram/SnmpWithRedis/blob/main/Device_Monitor.drawio.png)
+![Flowchart diagram](https://github.com/shamimiqram/SnmpWithRedis/blob/main/Device_Monitor_Details.png)
