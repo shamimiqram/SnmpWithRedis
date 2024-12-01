@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36" version="24.8.6">
+  <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
+    <mxGraphModel dx="2200" dy="1150" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="WIyWlLk6GJQsqaUBKTNV-1" parent="WIyWlLk6GJQsqaUBKTNV-0" />
+        <mxCell id="nR-PtHdbtlauzkzTdwom-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-5" target="nR-PtHdbtlauzkzTdwom-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-5" target="nR-PtHdbtlauzkzTdwom-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="160" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-0" target="nR-PtHdbtlauzkzTdwom-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-0" value="Initialize System&amp;nbsp;&lt;div&gt;Read Config, SNMP, Redis&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="255" y="100" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-5" value="Retrieve SNMP OIDs&amp;nbsp; from Redis" style="rounded=1;whiteSpace=wrap;html=1;fontSize=12;glass=0;strokeWidth=1;shadow=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="255" y="180" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-6" target="nR-PtHdbtlauzkzTdwom-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-6" value="&lt;div&gt;Perform SNMP Operations&amp;nbsp;&lt;/div&gt;&lt;div&gt;(GET/WALK) with OIDs&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="255" y="260" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-22" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-16" target="nR-PtHdbtlauzkzTdwom-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-16" value="&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Received &amp;amp; Process&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;SNMP Response&amp;nbsp;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="255" y="340" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-19" target="nR-PtHdbtlauzkzTdwom-0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-19" value="Start" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="280" y="30" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-24" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-21" target="nR-PtHdbtlauzkzTdwom-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-26" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-21" target="nR-PtHdbtlauzkzTdwom-25">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-21" value="Success / Error" style="rhombus;whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="285" y="420" width="110" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="432" y="598" as="targetPoint" />
+            <mxPoint x="555" y="479" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="555" y="598" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-23" value="&amp;nbsp;Log Error and Store Error&lt;div&gt;Info in Redis (JSON)&amp;nbsp;&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="470" y="440" width="170" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="253" y="600" as="targetPoint" />
+            <mxPoint x="137" y="480" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="137" y="600" />
+              <mxPoint x="253" y="600" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-25" value="Format &amp;amp; Store Results&lt;div&gt;in Redis (JSON)&lt;/div&gt;" style="whiteSpace=wrap;html=1;rounded=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="70" y="440" width="140" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-28" value="Error" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="395" y="430" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-29" value="Success" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="225" y="430" width="60" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="nR-PtHdbtlauzkzTdwom-32" target="nR-PtHdbtlauzkzTdwom-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-32" value="Trim Processed Data from&amp;nbsp;&lt;div&gt;Redis&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="255" y="579" width="176" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="nR-PtHdbtlauzkzTdwom-33" value="END" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="273" y="661" width="140" height="40" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
