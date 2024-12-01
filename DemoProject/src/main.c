@@ -72,7 +72,7 @@ void device_monitor()
 
             if(is_trim_enable)
             {
-                trim_data_from_redis(redis_output_key, pop_obj_cnt);
+                trim_data_from_redis(redis_input_key, pop_obj_cnt);
             }
             else
             {
