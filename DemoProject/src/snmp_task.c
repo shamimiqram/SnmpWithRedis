@@ -42,23 +42,41 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
 {
     char *hash_key = (char *)magic;
     active_snmp_req--;
-    //printf("Active Req : %d\n", active_snmp_req);
+    printf("Active Req : \n", active_snmp_req);
 
     if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
     {
+        int oid_info_cnt = 0;
+        cJSON *result_array = cJSON_CreateArray();
 
         for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
         {
             char buffer[1024];
+            oid_info_cnt++;
             size_t buffer_length = sizeof(buffer);
             snprint_variable(buffer, buffer_length, vars->name, vars->name_length, vars);
             //printf("%s\n", buffer);
 
             char *oid = malloc(1024);
             oid = parse_oid_info(vars->name, vars->name_length);
-            // printf("%s\n", oid);
-            format_oid_result_json(buffer, hash_key, oid);
+
+            cJSON *obj_json =  format_oid_result_json(buffer, hash_key, oid);
+            
+            char *json_data_str = malloc(1024);
+            json_data_str = cJSON_PrintUnformatted(obj_json);
+            //printf("OBJ: %s\n", json_data_str);
+
+            cJSON_AddItemToArray(result_array, obj_json);
+
+            //json_data_str = cJSON_PrintUnformatted(result_array);
+           // printf("ARRAY: %s\n", json_data_str);
         }
+
+        if(oid_info_cnt > 0)
+        {
+            set_value_with_json(hash_key, result_array);
+        }
+        printf(", OID info count : %d\n", oid_info_cnt);
     }
 
     else
@@ -66,6 +84,7 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
         // Handle error
         char *oid = malloc(1024);
         oid = parse_oid_info(response->variables->name, response->variables->name_length);
+        printf(", OID info return fail\n");
         //fprintf(stderr, "Error receiving SNMP response : %s \n", oid);
         set_error_value_in_redis(hash_key, oid, "Error receiving SNMP response");
 
@@ -108,28 +127,35 @@ void init_snmp_server(char *ip, char *ver, char *comm_str)
     session.community_len = strlen((const char *)session.community);
 }
 
-void snmp_get_with_hash_key(char *str, char *hash_key)
+void snmp_get_with_hash_key(char *str[], int oid_cnt, char *hash_key)
 {
-    // printf("From here :\n\n%s \n\n %s\n\n", str, hash_key);
+    if(oid_cnt == 0) return;
+    printf("GET Reqeust %d : OID Count : %d , Hash : %s\n",active_snmp_req, oid_cnt, hash_key);
     netsnmp_session *ss;
     netsnmp_pdu *pdu;
 
     ss = snmp_open(&session);
     pdu = snmp_pdu_create(SNMP_MSG_GET);
-    oid oid[MAX_OID_LEN];
-    size_t oid_len = MAX_OID_LEN;
-    if (!snmp_parse_oid(str, oid, &oid_len))
-    {
-        //fprintf(stderr, "Failed to parse OID : %s\n", str);
-        set_error_value_in_redis(hash_key, str, "Failed to parse OID");
-        return;
-    }
-
     session.callback = async_callback_with_hash_key;
     session.callback_magic = ss;
+
+    for(int i = 0; i < oid_cnt; i++)
+    {
+        oid oid[MAX_OID_LEN];
+        size_t oid_len = MAX_OID_LEN;
+        if (!snmp_parse_oid(str[i], oid, &oid_len))
+        {
+            //fprintf(stderr, "Failed to parse OID : %s\n", str);
+            set_error_value_in_redis(hash_key, str, "Failed to parse OID");
+            return;
+        }
+
+        snmp_add_null_var(pdu, oid, oid_len);
+    }
+    
     // printf("\n\nSend GET request: ");
     //printCurrentTime();
-    snmp_add_null_var(pdu, oid, oid_len);
+   
 
     int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, hash_key);
     active_snmp_req++;
@@ -144,28 +170,35 @@ void snmp_get_with_hash_key(char *str, char *hash_key)
     }
 }
 
-void snmp_walk_with_hash_key(char *str, char *hash_key)
+void snmp_walk_with_hash_key(char *str[], int oid_cnt, char *hash_key)
 {
-    // printf("From here :\n\n%s \n\n %s\n\n", str, hash_key);
+    if(oid_cnt == 0) return;
+    
+    printf("WALK Reqeust %d : OID Count : %d , Hash : %s\n",active_snmp_req, oid_cnt, hash_key);
     netsnmp_session *ss;
     netsnmp_pdu *pdu;
 
     ss = snmp_open(&session);
     pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
-    oid oid[MAX_OID_LEN];
-    size_t oid_len = MAX_OID_LEN;
-    if (!snmp_parse_oid(str, oid, &oid_len))
-    {
-        fprintf(stderr, "Failed to parse OID : %s\n", str);
-        set_error_value_in_redis(hash_key, str, "Failed to parse OID");
-        return;
-    }
-
     session.callback = async_callback_with_hash_key;
     session.callback_magic = ss;
-    //printf("\n\nSend WALK request: ");
-    //printCurrentTime();
-    snmp_add_null_var(pdu, oid, oid_len);
+
+    for(int i = 0; i < oid_cnt; i++)
+    {
+        oid oid[MAX_OID_LEN];
+        size_t oid_len = MAX_OID_LEN;
+        if (!snmp_parse_oid(str[i], oid, &oid_len))
+        {
+            fprintf(stderr, "Failed to parse OID : %s\n", str);
+            set_error_value_in_redis(hash_key, str, "Failed to parse OID");
+            return;
+        }
+        snmp_add_null_var(pdu, oid, oid_len);
+        break;
+    }
+
+        //printf("\n\nSend WALK request: ");
+        //printCurrentTime();
 
     int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, hash_key);
     active_snmp_req++;

@@ -97,32 +97,33 @@ void print_variable_list(netsnmp_variable_list *vars)
     }
 }
 
-void format_oid_result_json(char *result, char *key, char *oid)
+cJSON* format_oid_result_json(char *result, char *key, char *oid)
 {
     char *ret_oid = malloc(256);
+    char *type_value = malloc (256);
     char *type = malloc(256);
     char *value = malloc(256);
     int token_cnt = 0;
 
-    const char *delemeter = " :\\";
+
+    //printf("OID : %s, KEY : %s. RESULT: %s\n", oid, key, result);
+
+    const char *del_oid = "=";
+
+
+
+    const char *delemeter = "=";
     char *token = strtok(result, delemeter);
     char *no = "No";
-    char *equal = "=";
-
-    // Continue to tokenize the string until strtok returns NULL
+   // Continue to tokenize the string until strtok returns NULL
     while (token != NULL)
     {
-
         if (strcmp(token, no) == 0)
         {
             // printf("No data\n");
             type = "";
             value = "";
             break;
-        }
-        else if (strcmp(token, equal) == 0)
-        {
-            // printf("equal sign \n");
         }
         else if (token_cnt == 0)
         {
@@ -131,25 +132,43 @@ void format_oid_result_json(char *result, char *key, char *oid)
         }
         else if (token_cnt == 1)
         {
-            strcpy(type, token);
+            strcpy(type_value, token);
             token_cnt++;
         }
-        else if (token_cnt == 2)
-        {
-            strcpy(value, token);
-            token_cnt++;
-        }
-        else
-            strcat(value, token);
-
         // printf("Token: %s \n", token, result);
         token = strtok(NULL, delemeter); // Get the next token
     }
 
+    const char *delemeter_val = ": ";
+    token_cnt = 0;
+    char *token_value = strtok(type_value, delemeter_val);
+
+    while (token_value != NULL)
+    {
+        //printf("Token : %s\n", token_value);
+        if (token_cnt == 0)
+        {
+            strcpy(type, token_value);
+            token_cnt++;
+        }
+        else if (token_cnt == 1)
+        {
+            strcpy(value, token_value);
+            token_cnt++;
+        }
+        token_value = strtok(NULL, delemeter_val); // Get the next token
+    }
+
+
     cJSON ret;
+    //printf("\nOID: %s, TYPE: %s, VAL : %s\n", ret_oid, type, value);
     ret = oid_info_to_json(ret_oid, type, value, "");
+
+    cJSON *json_item = cJSON_CreateObject();
+    cJSON_AddItemReferenceToObject(json_item, oid, &ret);
     //printf(" Oid : %s\n", oid);
-    set_value_with_json(key, oid, &ret);
+    //set_value_with_json(key, oid, &ret);
+    return json_item;
 }
 
 int read_config_file(char *filename, char lines[MAX_LINES][MAX_LENGTH])
