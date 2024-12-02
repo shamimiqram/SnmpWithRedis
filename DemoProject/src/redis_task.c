@@ -61,11 +61,11 @@ void connect_redis()
 
 void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
 {
-    cJSON json_data;
+    cJSON *json_data;
     json_data = oid_info_to_json(oid, "", "", error_msg);
     cJSON *json_obj = cJSON_CreateObject();
     cJSON *json_item = cJSON_CreateObject();
-    cJSON_AddItemReferenceToObject(json_item, oid, &json_data);
+    cJSON_AddItemReferenceToObject(json_item, oid, json_data);
     cJSON_AddItemReferenceToObject(json_obj, key, json_item);
     char *json_str = malloc(1024);
     json_str = cJSON_PrintUnformatted(json_obj);
@@ -83,14 +83,20 @@ void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
     // printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
 }
 
-void set_value_with_json(const char *key, cJSON *json_data)
+void set_value_with_json(const char *key, cJSON *json_data[], const char *oid[], int cnt)
 {
     cJSON *json_obj = cJSON_CreateObject();
-    char *json_data_str = malloc(1024);
-    json_data_str = cJSON_PrintUnformatted(json_data);
+    cJSON *json_items = cJSON_CreateObject();
 
-    printf("%s\n", json_data_str);
-    cJSON_AddItemReferenceToObject(json_obj, key, json_data);
+    for(int i = 0; i < cnt ; i++)
+    {
+        char *json_data_str = malloc(1024);
+        json_data_str = cJSON_PrintUnformatted(json_data[i]);
+        //printf("%s\n", json_data_str);
+        cJSON_AddItemReferenceToObject(json_items, oid[i], json_data[i]);
+    }
+
+    cJSON_AddItemReferenceToObject(json_obj, key, json_items);
     char *json_str = malloc(1024 * 100);
     json_str = cJSON_PrintUnformatted(json_obj);
     printf("PUSH string : %s\n", json_str);

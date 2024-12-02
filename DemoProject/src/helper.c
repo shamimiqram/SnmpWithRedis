@@ -160,15 +160,15 @@ cJSON* format_oid_result_json(char *result, char *key, char *oid)
     }
 
 
-    cJSON ret;
+    cJSON* ret;
     //printf("\nOID: %s, TYPE: %s, VAL : %s\n", ret_oid, type, value);
     ret = oid_info_to_json(ret_oid, type, value, "");
 
-    cJSON *json_item = cJSON_CreateObject();
-    cJSON_AddItemReferenceToObject(json_item, oid, &ret);
+    //cJSON *json_item = cJSON_CreateObject();
+    //cJSON_AddItemReferenceToObject(json_item, oid, &ret);
     //printf(" Oid : %s\n", oid);
     //set_value_with_json(key, oid, &ret);
-    return json_item;
+    return ret;
 }
 
 int read_config_file(char *filename, char lines[MAX_LINES][MAX_LENGTH])

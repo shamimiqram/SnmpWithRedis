@@ -14,7 +14,7 @@
 #define REPLY_VALUE_KEY "value"
 #define ERROR_MSG_KEY "error"
 
-cJSON oid_info_to_json(char *oid, char *type, char *value, char *error_msg)
+cJSON* oid_info_to_json(char *oid, char *type, char *value, char *error_msg)
 {
     cJSON *json_object = cJSON_CreateObject();
 
@@ -23,7 +23,7 @@ cJSON oid_info_to_json(char *oid, char *type, char *value, char *error_msg)
     cJSON_AddStringToObject(json_object, REPLY_VALUE_KEY, value);
     cJSON_AddStringToObject(json_object, ERROR_MSG_KEY, error_msg);
 
-    return *json_object;
+    return json_object;
 }
 
 cJSON create_JSON_Object(char ip_address[], char version[], char comm_str[], char port[], char oid[], int operation)

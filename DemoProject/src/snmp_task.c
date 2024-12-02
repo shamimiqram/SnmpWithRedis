@@ -6,6 +6,8 @@
 #include "helper.h"
 #include "header_files.h"
 
+#define MAX_OID_CNT 100
+
 netsnmp_session session, *ss;
 netsnmp_pdu *pdu;
 netsnmp_variable_list *vars;
@@ -47,12 +49,12 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
     if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
     {
         int oid_info_cnt = 0;
-        cJSON *result_array = cJSON_CreateArray();
+        cJSON *result_array[MAX_OID_CNT];// = cJSON_CreateArray();
+        char *oid_array[MAX_OID_CNT];
 
         for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
         {
             char buffer[1024];
-            oid_info_cnt++;
             size_t buffer_length = sizeof(buffer);
             snprint_variable(buffer, buffer_length, vars->name, vars->name_length, vars);
             //printf("%s\n", buffer);
@@ -65,8 +67,9 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
             char *json_data_str = malloc(1024);
             json_data_str = cJSON_PrintUnformatted(obj_json);
             //printf("OBJ: %s\n", json_data_str);
-
-            cJSON_AddItemToArray(result_array, obj_json);
+            oid_array[oid_info_cnt] = oid;
+            result_array[oid_info_cnt++] = obj_json;
+            //cJSON_AddItemToArray(result_array, obj_json);
 
             //json_data_str = cJSON_PrintUnformatted(result_array);
            // printf("ARRAY: %s\n", json_data_str);
@@ -74,7 +77,7 @@ int async_callback_with_hash_key(int operation, struct snmp_session *session, in
 
         if(oid_info_cnt > 0)
         {
-            set_value_with_json(hash_key, result_array);
+            set_value_with_json(hash_key, result_array, oid_array, oid_info_cnt);
         }
         printf(", OID info count : %d\n", oid_info_cnt);
     }
