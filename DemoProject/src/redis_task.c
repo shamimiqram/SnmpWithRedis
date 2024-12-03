@@ -69,6 +69,7 @@ void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
     cJSON_AddItemReferenceToObject(json_obj, key, json_item);
     char *json_str = malloc(1024);
     json_str = cJSON_PrintUnformatted(json_obj);
+    printf("Error : \n %s\n", json_str);
     redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH %s %s", redis_output_key, json_str);
     if (reply == NULL)
     {

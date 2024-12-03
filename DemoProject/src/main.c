@@ -30,7 +30,7 @@ void* input_thread(void* arg) {
 void device_monitor()
 {
     int total_process_cnt = 0;
-    int start_pos = 0, list_cnt = 10;
+    int start_pos = 0, list_cnt = redis_list_cnt;
     bool is_trim_enable = false;
     pthread_t worker_thread;
     if(redis_trim == 1)

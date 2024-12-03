@@ -97,12 +97,13 @@ void print_variable_list(netsnmp_variable_list *vars)
     }
 }
 
-cJSON* format_oid_result_json(char *result, char *key, char *oid)
+cJSON* format_oid_result_json(char *result)
 {
     char *ret_oid = malloc(256);
     char *type_value = malloc (256);
     char *type = malloc(256);
     char *value = malloc(256);
+    char *error = malloc(256);
     int token_cnt = 0;
 
 
@@ -140,13 +141,20 @@ cJSON* format_oid_result_json(char *result, char *key, char *oid)
     }
 
     const char *delemeter_val = ": ";
+    strcpy(error, type_value);
     token_cnt = 0;
     char *token_value = strtok(type_value, delemeter_val);
 
     while (token_value != NULL)
     {
         //printf("Token : %s\n", token_value);
-        if (token_cnt == 0)
+        if(strcmp(token_value, "Wrong") == 0)
+        {
+            type = "";
+            value = "";
+            break;
+        }
+        else if (token_cnt == 0)
         {
             strcpy(type, token_value);
             token_cnt++;
@@ -155,19 +163,14 @@ cJSON* format_oid_result_json(char *result, char *key, char *oid)
         {
             strcpy(value, token_value);
             token_cnt++;
+            error = "";
         }
         token_value = strtok(NULL, delemeter_val); // Get the next token
     }
 
 
     cJSON* ret;
-    //printf("\nOID: %s, TYPE: %s, VAL : %s\n", ret_oid, type, value);
-    ret = oid_info_to_json(ret_oid, type, value, "");
-
-    //cJSON *json_item = cJSON_CreateObject();
-    //cJSON_AddItemReferenceToObject(json_item, oid, &ret);
-    //printf(" Oid : %s\n", oid);
-    //set_value_with_json(key, oid, &ret);
+    ret = oid_info_to_json(ret_oid, type, value, error);
     return ret;
 }
 
