@@ -7,7 +7,7 @@
 #include "header_files.h"
 
 
-#define MAX_OID_CNT 10
+#define MAX_OID_CNT 100
 #define SNMP_GET_OP 1
 #define SNMP_WALK_OP 2
 
