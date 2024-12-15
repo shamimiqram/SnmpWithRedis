@@ -6,7 +6,7 @@
 #include "helper.h"
 #include "header_files.h"
 
-#define MAX_OID_CNT 100
+#define MAX_OID_CNT 500
 
 netsnmp_session session, *ss;
 netsnmp_pdu *pdu;
