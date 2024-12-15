@@ -4,22 +4,16 @@
 #include <stdlib.h>
 
 #include "helper.h"
-#include "all.h"
+#include "header_files.h"
 
-#define PUSH_COMMAND "LPUSH"
-#define POP_COMMAND "LPOP"
-#define SET_COMMAND "SET"
-#define HSET_COMMAND "HSET"
-#define SNMP_VERSION SNMP_VERSION_2c
-#define COMMUNITY_STRING "audramonitor"
-#define HOST_IP "103.218.25.9"
+#define MAX_OID_CNT 100
 
 netsnmp_session session, *ss;
 netsnmp_pdu *pdu;
 netsnmp_variable_list *vars;
 netsnmp_pdu *response;
 
-char*  print_oid_2(oid *oid, size_t oid_len)
+char *parse_oid_info(oid *oid, size_t oid_len)
 {
     char *buffer;
     buffer = malloc(1024);
@@ -28,258 +22,230 @@ char*  print_oid_2(oid *oid, size_t oid_len)
     {
         if (i > 0)
         {
-            strcat(buffer,".");
+            strcat(buffer, ".");
         }
         char str[20];
         sprintf(str, "%ld", oid[i]);
-        if(i == 0)
+        if (i == 0)
         {
-            strcpy(buffer,str);
+            strcpy(buffer, str);
         }
-        else{
-            strcat(buffer,str);
+        else
+        {
+            strcat(buffer, str);
         }
     }
-    //printf("OID BUFFER : %s\n",buffer);
+    // printf("OID BUFFER : %s\n",buffer);
     return buffer;
     // printf("printed \n");
 }
 
-void print_variable_list_2(netsnmp_variable_list *vars)
-{
-
-    while (vars)
-    {
-
-        // print_oid_2(vars->name, vars->name_length);
-
-        // Handle different variable types
-        switch (vars->type)
-        {
-        case ASN_INTEGER:
-            printf("INTEGER : %d\n", *(vars->val.integer));
-            break;
-        case ASN_OCTET_STR:
-            printf("%s\n", vars->val.string);
-            break;
-        case ASN_OBJECT_ID:
-            printf("OID value\n");
-            print_oid(vars->val.objid, vars->val_len);
-            break;
-        case ASN_IPADDRESS:
-            printf("IP Address: %d.%d.%d.%d\n",
-                   vars->val.integer[0], vars->val.integer[1],
-                   vars->val.integer[2], vars->val.integer[3]);
-            break;
-
-        case ASN_COUNTER:
-            printf("Counter: %u\n", *(vars->val.counter64));
-            break;
-        case ASN_GAUGE:
-            printf("Gauge32 : %u\n", *(vars->val.counter64));
-            break;
-        case ASN_TIMETICKS:
-            printf("Value: %u\n", *(vars->val.integer));
-            break;
-        default:
-            printf("Unknown type\n");
-            break;
-        }
-        vars = vars->next_variable;
-        // vars = vars->next_variable;  // Move to the next variable in the list
-    }
-}
-
-int async_callback(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response, void *magic)
-{
-
-    if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
-    {
-
-        for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
-        {
-            print_variable(vars->name, vars->name_length, vars);
-            // printf("\n\n\n");
-            // print_variable_list_2(vars);
-
-            // printf("GET Response : ");
-            // printCurrentTime();
-        }
-    }
-
-    else
-    {
-        // Handle error
-        fprintf(stderr, "Error receiving SNMP response\n");
-    }
-    active_snmp_req--;
-    return 1;
-}
-
-char *format_variable(netsnmp_variable_list *var)
-{
-    char buffer[1024];
-    size_t buffer_length = sizeof(buffer);
-    char *result = NULL;
-
-    // Convert the OID to a string
-    if (1 < 6)
-    {
-        // Prepare the output string based on the variable type
-        switch (var->type)
-        {
-        case ASN_INTEGER:
-            result = malloc(256);
-            snprintf(result, 256, "OID: %s, Value: %d", buffer, *var->val.integer);
-            break;
-        case ASN_OCTET_STR:
-            result = malloc(256);
-            snprintf(result, 256, "OID: %s, Value: %s", buffer, (char *)var->val.string);
-            break;
-        case ASN_IPADDRESS:
-        {
-            // Format the IP address from val.string
-            unsigned char *ip = var->val.string;
-            result = malloc(256);
-            snprintf(result, 256, "OID: %s, Value: %d.%d.%d.%d",
-                     buffer, ip[0], ip[1], ip[2], ip[3]);
-            break;
-        }
-        default:
-            result = malloc(256);
-            snprintf(result, 256, "OID: %s, Unknown type: %d", buffer, var->type);
-        }
-    }
-    else
-    {
-        result = strdup("Failed to convert OID to string");
-    }
-
-    return result;
-}
-
 int async_callback_with_hash_key(int operation, struct snmp_session *session, int reqid, netsnmp_pdu *response, void *magic)
 {
-    char *hash_key = (char *)magic;
-    // printf("GET Response : key : %s", hash_key);
-    printCurrentTime();
+    active_snmp_req--;
+    printf("Active Req : %d\n", active_snmp_req);
+    return 0;
+    char *parameter_str = (char *)magic;
+    printf("Magic : %s", parameter_str);
+
+    int oid_info_cnt = 0;
+    cJSON *result_array[MAX_OID_CNT];
+    char *oid_array[MAX_OID_CNT];
 
     if (operation == NETSNMP_CALLBACK_OP_RECEIVED_MESSAGE)
     {
 
         for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
         {
-            ;
             char buffer[1024];
+            char *oid = malloc(1024);
             size_t buffer_length = sizeof(buffer);
             snprint_variable(buffer, buffer_length, vars->name, vars->name_length, vars);
-            printf("%s\n", buffer);
+            oid = parse_oid_info(vars->name, vars->name_length);
 
-            char* ret = malloc(1024);
-            char* oid = malloc(1024);
-            oid = print_oid_2(vars->name, vars->name_length);
-            printf("%s\n", oid);
-            ret =  format_oid_result_json(buffer, hash_key, oid);
-            //printf("%s\n", ret);
-            //set_value_with_json(hash_key, ret);
+            cJSON *obj_json =  format_oid_result_json(buffer);
+            oid_array[oid_info_cnt] = oid;
+            result_array[oid_info_cnt++] = obj_json;
+            
+            //char *json_data_str = malloc(1024);
+            //json_data_str = cJSON_PrintUnformatted(obj_json);
+            //printf("OBJ: %s\n", json_data_str);
         }
     }
-    // char *result = format_variable(vars);
 
     else
     {
+        
+        for (netsnmp_variable_list *vars = response->variables; vars; vars = vars->next_variable)
+        {
+            char buffer[1024];
+            char *oid = malloc(1024);
+            size_t buffer_length = sizeof(buffer);
+            snprint_variable(buffer, buffer_length, vars->name, vars->name_length, vars);
+            oid = parse_oid_info(vars->name, vars->name_length);
+            cJSON *obj_json =  format_oid_result_json(buffer);
+            oid_array[oid_info_cnt] = oid;
+            result_array[oid_info_cnt++] = obj_json;
+        }
         // Handle error
-        fprintf(stderr, "Error receiving SNMP response\n");
+        /*char *oid = malloc(1024);
+        oid = parse_oid_info(response->variables->name, response->variables->name_length);
+        printf("OID info return fail :  %s\n", oid);
+        //fprintf(stderr, "Error receiving SNMP response : %s \n", oid);
+        set_error_value_in_redis(hash_key, oid, "Error receiving SNMP response");*/
+
     }
-    active_snmp_req--;
+
+    //Add oid_parse_error_oids
+    char *hash_key;
+    const char *delemeter = "|";
+    char *token = strtok(parameter_str, delemeter);
+    int token_cnt = 0;
+
+    while (token != NULL)
+    {
+        //printf("Hash : %s", token);
+        if (token_cnt == 0)
+        {
+            hash_key = malloc(strlen(token) + 1); 
+            strcpy(hash_key, token);
+            token_cnt++;
+        }
+        else
+        {
+            char *oid_fail;
+            oid_fail = malloc(strlen(token) + 1);
+            strcpy(oid_fail, token);
+
+            cJSON *json_oid_failed;
+            json_oid_failed = oid_info_to_json(oid_fail,"", "", "Failed to Parse OID");
+            result_array[oid_info_cnt] = json_oid_failed;
+            oid_array[oid_info_cnt++] = oid_fail;
+        }
+        token = strtok(NULL, delemeter); // Get the next token
+    }
+
+    if(oid_info_cnt > 0)
+    {
+        set_value_with_json(hash_key, result_array, oid_array, oid_info_cnt);
+    }
+    printf(", OID info count : %d\n", oid_info_cnt);
+
     return 1;
 }
 
-void init_snmp_task()
+long version_convert(char *ver)
 {
-    init_snmp("snmpapp");
-    active_snmp_req = 0;
+    long ver_info;
 
-    // Set up the SNMP session
-    snmp_sess_init(&session);
-    session.peername = strdup(HOST_IP);
-    session.version = SNMP_VERSION;
-    session.community = (u_char *)strdup(COMMUNITY_STRING);
-    session.community_len = strlen((const char *)session.community);
+    if (strcmp(ver, "SNMPv1") == 0)
+    {
+        ver_info = SNMP_VERSION_1;
+    }
+    else if (strcmp(ver, "SNMPv2c") == 0)
+    {
+        ver_info = SNMP_VERSION_2c;
+    }
+    else if (strcmp(ver, "SNMPv3") == 0)
+    {
+        ver_info = SNMP_VERSION_3;
+    }
+    else
+        ver_info = SNMP_VERSION_2c;
+
+    return ver_info;
 }
 
-void init_snmp_with_ip(char *ip, char *ver, char *comm_str)
+void init_snmp_server(char *ip, char *ver, char *comm_str)
 {
     init_snmp(ip);
     snmp_sess_init(&session);
     session.peername = strdup(ip);
-    session.version = SNMP_VERSION;
+    session.version = version_convert(ver);
     session.community = (u_char *)strdup(comm_str);
     session.community_len = strlen((const char *)session.community);
 }
 
-void snmp_get_with_hash_key(char *str, char *hash_key)
+void snmp_get_with_hash_key(char *str[], int oid_cnt, char *hash_key)
 {
-    // printf("From here :\n\n%s \n\n %s\n\n", str, hash_key);
+    if(oid_cnt == 0) return;
+
+    printf("GET Reqeust %d : OID Count : %d , Hash : %s\n",active_snmp_req, oid_cnt, hash_key);
+    char *parameter_str;
+    parameter_str = hash_key;
+
     netsnmp_session *ss;
     netsnmp_pdu *pdu;
-
     ss = snmp_open(&session);
     pdu = snmp_pdu_create(SNMP_MSG_GET);
-    oid oid[MAX_OID_LEN];
-    size_t oid_len = MAX_OID_LEN;
-    if (!snmp_parse_oid(str, oid, &oid_len))
-    {
-        fprintf(stderr, "Failed to parse OID\n");
-        return;
-    }
-
     session.callback = async_callback_with_hash_key;
     session.callback_magic = ss;
-    // printf("\n\nSend GET request: ");
-    printCurrentTime();
-    snmp_add_null_var(pdu, oid, oid_len);
 
-    int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, hash_key);
-    active_snmp_req++;
-    //printf("Status : %d --- > ", status);
-    // printCurrentTime();
+    for(int i = 0; i < oid_cnt; i++)
+    {
+        oid oid[MAX_OID_LEN];
+        size_t oid_len = MAX_OID_LEN;
+        printf("Process run for OID:%s\n", str[i]);
+
+        if (true || !snmp_parse_oid(str[i], oid, &oid_len))
+        {
+            printf("Failed to parse OID : %s\n", str[i]);
+            strncat((char*)parameter_str, "|", 1);
+            strcat((char*)parameter_str, (char*)str[i]);
+            printf("Param : %s\n", parameter_str);
+        }
+        else snmp_add_null_var(pdu, oid, oid_len);
+    }
+    printf("Here \nParam : %s\n", parameter_str);
+    //int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, parameter_str);
+    int status = 0;
+    printf("Status : %d\n", status);
+
     if (status == 0)
     {
-        snmp_perror("snmp_send");
-        exit(1);
+        //snmp_perror("snmp_send");
+        //set_error_value_in_redis(hash_key, str, "Failed to send GET request");
     }
+    else active_snmp_req++;
+
+    printf("Active status : %d\n", active_snmp_req);
 }
 
-void snmp_get_req(char str[])
+void snmp_walk_with_hash_key(char *str[], int oid_cnt, char *hash_key)
 {
+    if(oid_cnt == 0) return;
+    return;
+    
+    printf("WALK Reqeust %d : OID Count : %d , Hash : %s\n",active_snmp_req, oid_cnt, hash_key);
+    char *parameter_str;
+    parameter_str = hash_key;
+    
     netsnmp_session *ss;
     netsnmp_pdu *pdu;
-
     ss = snmp_open(&session);
-    pdu = snmp_pdu_create(SNMP_MSG_GET);
-    oid oid[MAX_OID_LEN];
-    size_t oid_len = MAX_OID_LEN;
+    pdu = snmp_pdu_create(SNMP_MSG_GETNEXT);
+    session.callback = async_callback_with_hash_key;
+    session.callback_magic = ss;
 
-    if (!snmp_parse_oid(str, oid, &oid_len))
+    for(int i = 0; i < oid_cnt; i++)
     {
-        fprintf(stderr, "Failed to parse OID\n");
-        return;
+        oid oid[MAX_OID_LEN];
+        size_t oid_len = MAX_OID_LEN;
+        if (!snmp_parse_oid(str[i], oid, &oid_len))
+        {
+            printf("Failed to parse OID : %s\n", str);
+            strncat((char*)parameter_str, "|", 1);
+            strcat((char*)parameter_str, (char*)str[i]);
+        }
+        snmp_add_null_var(pdu, oid, oid_len);
     }
 
-    session.callback = async_callback;
-    session.callback_magic = ss;
-    printf("\n\nSend GET request: ");
-    printCurrentTime();
-    snmp_add_null_var(pdu, oid, oid_len);
+    int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, parameter_str);
 
-    int status = snmp_async_send(ss, pdu, async_callback, NULL);
-    active_snmp_req++;
-    // printf("Status : %d --- > ", status);
-    printCurrentTime();
     if (status == 0)
     {
         snmp_perror("snmp_send");
-        exit(1);
+        set_error_value_in_redis(hash_key, str, "Failed to send WALK request");
     }
+    else active_snmp_req++;
 }

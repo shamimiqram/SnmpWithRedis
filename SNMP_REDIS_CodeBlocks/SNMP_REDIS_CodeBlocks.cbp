@@ -15,7 +15,7 @@
 					<Add option="-g" />
 				</Compiler>
 				<Linker>
-					<Add library="snmp" />
+					<Add library="netsnmp" />
 					<Add library="hiredis" />
 					<Add library="cjson" />
 					<LinkerExe value="CCompiler" />
