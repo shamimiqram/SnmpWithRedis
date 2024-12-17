@@ -59,16 +59,21 @@ void connect_redis()
     freeReplyObject(reply);
 }
 
-void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
+void set_error_value_in_redis(const char *key, char *oid[], int oid_cnt, char *error_msg)
 {
-    cJSON *json_data;
-    json_data = oid_info_to_json(oid, "", "", error_msg);
     cJSON *json_obj = cJSON_CreateObject();
-    cJSON *json_item = cJSON_CreateObject();
-    cJSON_AddItemReferenceToObject(json_item, oid, json_data);
-    cJSON_AddItemReferenceToObject(json_obj, key, json_item);
-    char *json_str = malloc(1024);
+    cJSON *json_items = cJSON_CreateObject();
+
+    for(int i = 0; i < oid_cnt ; i++)
+    {
+        cJSON* json_data = oid_info_to_json(oid[i],"", "", error_msg);
+        cJSON_AddItemReferenceToObject(json_items, oid[i], json_data);
+    }
+
+    cJSON_AddItemReferenceToObject(json_obj, key, json_items);
+    char *json_str = malloc(1024 * 100);
     json_str = cJSON_PrintUnformatted(json_obj);
+
     printf("Error : \n %s\n", json_str);
     redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH %s %s", redis_output_key, json_str);
     if (reply == NULL)
@@ -84,7 +89,7 @@ void set_error_value_in_redis(const char *key, char *oid, char *error_msg)
     // printf("RPUSH EYE:SNMP_RESULT %s\n", json_str);
 }
 
-void set_value_with_json(const char *key, cJSON *json_data[], const char *oid[], int cnt)
+void set_value_with_json(const char *key, cJSON *json_data[], char *oid[], int cnt)
 {
     cJSON *json_obj = cJSON_CreateObject();
     cJSON *json_items = cJSON_CreateObject();
@@ -100,7 +105,7 @@ void set_value_with_json(const char *key, cJSON *json_data[], const char *oid[],
     cJSON_AddItemReferenceToObject(json_obj, key, json_items);
     char *json_str = malloc(1024 * 100);
     json_str = cJSON_PrintUnformatted(json_obj);
-    printf("PUSH string : %s\n", json_str);
+   // printf("PUSH string : %s\n", json_str);
     redisReply *reply = (redisReply *)redisCommand(redis, "RPUSH %s %s", redis_output_key, json_str);
     if (reply == NULL)
     {
@@ -142,41 +147,71 @@ void parse_oid_data_from_json(cJSON *json)
 
     //printf("IP : %s\n", device_ip->valuestring);
 
+    if (oid_info == NULL || device_ip == NULL || snmp_version == NULL || snmp_community_str == NULL)
+    {
+        return;
+    }
+
     cJSON *item;
 
     init_snmp_server(device_ip->valuestring, snmp_version->valuestring, snmp_community_str->valuestring);
     cJSON_ArrayForEach(item, oid_info)
     {
+        if(item == NULL) continue;
+
+        char *str = cJSON_Print(item);
+
+        if(str == NULL) return;
+        //printf("ITEM:\n%s\n",str);
+        if(strlen(str) < 20)
+        {
+            printf("ITEM:\n%s\n",str);
+            return;
+        }
+
+
         cJSON *snmpget = cJSON_GetObjectItem(item, "snmpget");
         cJSON *snmpwalk = cJSON_GetObjectItem(item, "snmpwalk");
         cJSON *redis_map_key = cJSON_GetObjectItem(item, "redis_map_key");
 
+        if(redis_map_key == NULL)
+        {
+            return;
+        }
         // Print the redis_map_key
         // printf("Redis Map Key: %s\n", redis_map_key->valuestring);
 
-        cJSON *snmpget_value;
-        char *oid_list[MAX_OID_CNT];
-        int oid_cnt = 0;
-
-        cJSON_ArrayForEach(snmpget_value, snmpget)
+        if(snmpget != NULL)
         {
-            oid_list[oid_cnt++] = snmpget_value->valuestring;
-            // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
-            // break;
+            cJSON *snmpget_value;
+            char *oid_list[MAX_OID_CNT];
+            int oid_cnt = 0;
+
+            cJSON_ArrayForEach(snmpget_value, snmpget)
+            {
+                oid_list[oid_cnt++] = snmpget_value->valuestring;
+                // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
+                // break;
+            }
+
+            if(oid_cnt > 0)  proces_oid_data(oid_list, oid_cnt, redis_map_key->valuestring, SNMP_GET_OP);
         }
 
-        proces_oid_data(oid_list, oid_cnt, redis_map_key->valuestring, SNMP_GET_OP);
-
-        cJSON *snmpwalk_value;
-        oid_cnt = 0;
-        cJSON_ArrayForEach(snmpwalk_value, snmpwalk)
+        if(snmpwalk != NULL)
         {
-            oid_list[oid_cnt++] = snmpwalk_value->valuestring;
-            // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
-            // break;
+            cJSON *snmpwalk_value;
+            char *oid_list[MAX_OID_CNT];
+            int oid_cnt = 0;
+            cJSON_ArrayForEach(snmpwalk_value, snmpwalk)
+            {
+                oid_list[oid_cnt++] = snmpwalk_value->valuestring;
+                // printf("  SNMP Get OID: %s\n", snmpget_value->valuestring);
+                // break;
+            }
+
+            if(oid_cnt > 0) proces_oid_data(oid_list, oid_cnt, redis_map_key->valuestring, SNMP_WALK_OP);
         }
-        
-        proces_oid_data(oid_list, oid_cnt, redis_map_key->valuestring, SNMP_WALK_OP);
+
     }
 }
 

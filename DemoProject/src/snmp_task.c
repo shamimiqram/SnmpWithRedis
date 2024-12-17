@@ -169,9 +169,15 @@ void snmp_get_with_hash_key(char *str[], int oid_cnt, char *hash_key)
     if(oid_cnt == 0) return;
 
     printf("GET Reqeust %d : OID Count : %d , Hash : %s\n",active_snmp_req, oid_cnt, hash_key);
-    char *parameter_str;
+    for(int i =  0; i < oid_cnt; i++)
+    {
+        printf("OID %d : %s\n", i+1, str[i]);
+    }
+    char *parameter_str = malloc(512);
+
     parameter_str = hash_key;
 
+    int success_to_parse = 0;
     netsnmp_session *ss;
     netsnmp_pdu *pdu;
     ss = snmp_open(&session);
@@ -183,23 +189,48 @@ void snmp_get_with_hash_key(char *str[], int oid_cnt, char *hash_key)
     {
         oid oid[MAX_OID_LEN];
         size_t oid_len = MAX_OID_LEN;
-        if (!snmp_parse_oid(str[i], oid, &oid_len))
+
+        if((str[i][0] >= 'a' && str[i][0] <= 'z') || (str[i][0] >= 'A' && str[i][0] <= 'Z'))
         {
-            printf("Failed to parse OID : %s\n", str);
-            strncat((char*)parameter_str, "|", 1);
-            strcat((char*)parameter_str, (char*)str[i]);
+            printf("Failed to parse OID : %s\n", str[i]);
+            char * tmp = malloc(1024);// = parameter_str;
+            snprintf(tmp,strlen(parameter_str) + strlen(str[i]) + 3, "%s|%s", parameter_str, str[i]);
+            parameter_str = tmp;
+            printf("Param: %s --> Len:(%ld)\n", parameter_str, strlen(parameter_str));
         }
-        else snmp_add_null_var(pdu, oid, oid_len);
+        else if (!snmp_parse_oid(str[i], oid, &oid_len))
+        {
+            printf("Failed to parse OID : %s\n", str[i]);
+            char * tmp = malloc(1024);// = parameter_str;
+            snprintf(tmp,strlen(parameter_str) + strlen(str[i]) + 3, "%s|%s", parameter_str, str[i]);
+            parameter_str = tmp;
+            printf("Param: %s --> Len:(%ld)\n", parameter_str, strlen(parameter_str));
+        }
+        else 
+        {
+            success_to_parse++;
+            snmp_add_null_var(pdu, oid, oid_len);
+        }
     }
 
-    int status = snmp_async_send(ss, pdu, async_callback_with_hash_key, parameter_str);
+    int status = 0;
+    
+    if(success_to_parse > 0)
+    {
+        status = snmp_async_send(ss, pdu, async_callback_with_hash_key, parameter_str);
+    }
+    else
+    {
+        status = 0;//snmp_async_send(ss, pdu, async_callback_with_hash_key, parameter_str);
+    } 
 
     if (status == 0)
     {
-        snmp_perror("snmp_send");
-        set_error_value_in_redis(hash_key, str, "Failed to send GET request");
+        //snmp_perror("snmp_send");
+        set_error_value_in_redis(hash_key, str, oid_cnt, "Failed to send GET request");
     }
     else active_snmp_req++;
+    free(parameter_str);
 }
 
 void snmp_walk_with_hash_key(char *str[], int oid_cnt, char *hash_key)
@@ -222,11 +253,21 @@ void snmp_walk_with_hash_key(char *str[], int oid_cnt, char *hash_key)
     {
         oid oid[MAX_OID_LEN];
         size_t oid_len = MAX_OID_LEN;
-        if (!snmp_parse_oid(str[i], oid, &oid_len))
+        if((str[i][0] >= 'a' && str[i][0] <= 'z') || (str[i][0] >= 'A' && str[i][0] <= 'Z'))
         {
-            printf("Failed to parse OID : %s\n", str);
-            strncat((char*)parameter_str, "|", 1);
-            strcat((char*)parameter_str, (char*)str[i]);
+            printf("Failed to parse OID : %s\n", str[i]);
+            char * tmp = malloc(1024);// = parameter_str;
+            snprintf(tmp,strlen(parameter_str) + strlen(str[i]) + 3, "%s|%s", parameter_str, str[i]);
+            parameter_str = tmp;
+            printf("Param: %s --> Len:(%ld)\n", parameter_str, strlen(parameter_str));
+        }
+        else if (!snmp_parse_oid(str[i], oid, &oid_len))
+        {
+            printf("Failed to parse OID : %s\n", str[i]);
+            char * tmp = malloc(1024);// = parameter_str;
+            snprintf(tmp,strlen(parameter_str) + strlen(str[i]) + 3, "%s|%s", parameter_str, str[i]);
+            parameter_str = tmp;
+            printf("Param: %s --> Len:(%ld)\n", parameter_str, strlen(parameter_str));
         }
         snmp_add_null_var(pdu, oid, oid_len);
     }
@@ -236,7 +277,7 @@ void snmp_walk_with_hash_key(char *str[], int oid_cnt, char *hash_key)
     if (status == 0)
     {
         snmp_perror("snmp_send");
-        set_error_value_in_redis(hash_key, str, "Failed to send WALK request");
+        set_error_value_in_redis(hash_key, str, oid_cnt, "Failed to send WALK request");
     }
     else active_snmp_req++;
 }

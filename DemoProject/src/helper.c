@@ -116,14 +116,16 @@ cJSON* format_oid_result_json(char *result)
     const char *delemeter = "=";
     char *token = strtok(result, delemeter);
     char *no = "No";
+
+    strcpy(type, "");
+    strcpy(type, "");
+    strcpy(error, "");
    // Continue to tokenize the string until strtok returns NULL
     while (token != NULL)
     {
         if (strcmp(token, no) == 0)
         {
             // printf("No data\n");
-            type = "";
-            value = "";
             break;
         }
         else if (token_cnt == 0)
@@ -150,8 +152,6 @@ cJSON* format_oid_result_json(char *result)
         //printf("Token : %s\n", token_value);
         if(strcmp(token_value, "Wrong") == 0)
         {
-            type = "";
-            value = "";
             break;
         }
         else if (token_cnt == 0)
@@ -163,7 +163,6 @@ cJSON* format_oid_result_json(char *result)
         {
             strcpy(value, token_value);
             token_cnt++;
-            error = "";
         }
         token_value = strtok(NULL, delemeter_val); // Get the next token
     }

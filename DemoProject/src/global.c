@@ -6,9 +6,9 @@
 int active_snmp_req = 0;
 char *redis_ip = "103.239.252.139";
 int redis_port = 6379;
-const char *redis_pass = "Nopass1234";
-const char *redis_input_key = "EYE:SNMP_PENDING";
-const char *redis_output_key = "EYE:SNMP_PENDING";
+char *redis_pass = "Nopass1234";
+char *redis_input_key = "EYE:SNMP_PENDING";
+char *redis_output_key = "EYE:SNMP_PENDING";
 int redis_list_cnt = 0;
 int redis_trim = 1; // 1 for trim, 0 for no trim
 
